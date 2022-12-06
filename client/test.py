@@ -2,7 +2,7 @@
 import requests
 import time
 from getInfo.getGPUInfo import GetGPUInfo
-from util.networkUtil import get_host_ip
+from util.network_util import get_host_ip
 from entity.message import Message
 import json
 getGPUInfo = GetGPUInfo()
