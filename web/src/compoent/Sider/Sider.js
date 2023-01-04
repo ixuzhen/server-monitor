@@ -39,9 +39,12 @@ function Sider() {
                 left: 0,
                 top: 0,
                 bottom: 0,
+                borderRightStyle: 'solid',
+                borderRightWidth:'1px',
+                borderRightColor: '#DCDCDC'
             }} theme="light"
         >
-            <div className="logo" style={{paddingTop:'4px'}}>
+            <div className="logo" style={{paddingTop:'2px'}}>
                 <img src="/logo192.png" alt="some_text"
                      style={{width: 64, height: 64, display: "block", margin: "auto"}}
                 />

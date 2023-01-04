@@ -11,7 +11,8 @@ class Header extends Component {
                 className="site-layout-background"
 
                 style={{
-                    position: 'sticky', top: 0, zIndex: 1,
+                    // position: 'sticky',
+                    top: 0, zIndex: 1,
                     padding: 0,
                     backgroundColor: "white"
                 }}

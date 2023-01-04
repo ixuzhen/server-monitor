@@ -1,6 +1,7 @@
 package cn.luckynow.monitoringserver.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
@@ -63,5 +64,8 @@ public class GpuInfo implements Serializable {
 
     private Integer temperature;
 
+    // GPU 中是否存在计算进程，如果存在该字段就为true
+    @TableField(exist = false)
+    private Boolean isUsed = false;
 
 }
