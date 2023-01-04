@@ -5,6 +5,3 @@ class Message:
     def __init__(self, ip, date):
         self.ip = ip
         self.date = date
-
-    def addGPUIfo(self, gpuInfo):
-        self.gpuInfo = gpuInfo
