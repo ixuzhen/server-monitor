@@ -16,6 +16,9 @@ public class Result<T> {
     public static <E> Result<E> successWithoutData(){
         return new Result<E>(200,null,null);
     }
+    public static <E> Result<E> successWithMessage(String message){
+        return new Result<E>(200,message,null);
+    }
 
     public static <E> Result<E> successWithData(E data){
         return new Result<E>(200,null,data);

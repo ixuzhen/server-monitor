@@ -28,6 +28,7 @@ public class Host implements Serializable {
 
     private String ip;
 
+    private Timestamp dateHost;
 
 
 }
