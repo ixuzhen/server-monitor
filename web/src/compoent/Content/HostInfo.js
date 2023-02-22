@@ -3,6 +3,7 @@ import { Layout, Space, Table, Tag } from 'antd';
 import axios from 'axios';
 import { isSuccess } from '../../helper/utils';
 import { Link } from 'react-router-dom';
+import { API } from '../../request';
 
 const AntdContent = Layout.Content;
 
@@ -54,7 +55,7 @@ function HostInfo(props) {
   const [hosts, setHosts] = useState(undefined);
 
   const loadHosts = async () => {
-    const res = await axios({
+    const res = await API({
       method: 'GET',
       url: '/server/hosts',
     }).then((response) => {

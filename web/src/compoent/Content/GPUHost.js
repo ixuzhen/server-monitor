@@ -11,6 +11,7 @@ import {
   useRoutes,
 } from 'react-router-dom';
 import GPUUsed from './GPUUsed';
+import { API } from '../../request';
 
 const { Panel } = Collapse;
 
@@ -37,7 +38,7 @@ function GPUHost(props) {
   const [hosts, setHosts] = useState(undefined);
 
   const loadHosts = async () => {
-    const res = await axios({
+    const res = await API({
       method: 'GET',
       url: '/server/hosts',
     }).then((response) => {

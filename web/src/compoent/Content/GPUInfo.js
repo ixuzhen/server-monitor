@@ -6,6 +6,7 @@ import { isSuccess, paringDate } from '../../helper/utils';
 import { Card, List, Table } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
+import { API } from '../../request';
 
 const columns_gpu = [
   {
@@ -77,7 +78,7 @@ const GPUInfo = () => {
   const [gpuprosinfos, setGpuProcInfos] = useState([]);
 
   const loadHosts = async () => {
-    await axios({
+    await API({
       method: 'GET',
       url: '/server/gpu?ip=' + ip,
     }).then((response) => {
@@ -88,7 +89,7 @@ const GPUInfo = () => {
       }
     });
 
-    await axios({
+    await API({
       method: 'GET',
       url: '/server/gpu/proc?ip=' + ip,
     }).then((response) => {

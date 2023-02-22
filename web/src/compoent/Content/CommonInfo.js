@@ -3,6 +3,7 @@ import { Card, List, Space, Table, Tag } from 'antd';
 import axios from 'axios';
 import { isSuccess, paringDate } from '../../helper/utils';
 import { useParams } from 'react-router-dom';
+import { API } from '../../request';
 
 const pasringByte = (text) => {
   const kb = parseInt(text) / 1024;
@@ -63,7 +64,7 @@ const CommonInfo = () => {
   const [datas, setDatas] = useState([]);
 
   const loadCommonInfo = async () => {
-    await axios({
+    await API({
       method: 'GET',
       url: '/server/disk/usage?ip=' + ip,
     })

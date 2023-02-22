@@ -47,7 +47,7 @@ const GPUUsed = (props) => {
   const loadHosts = async () => {
     const res = await axios({
       method: 'GET',
-      url: '/server/unusedGPU',
+      url: '/server/usedGPU',
     }).then((response) => {
       const { code, message, data } = response.data;
       if (isSuccess(code)) {
@@ -66,7 +66,7 @@ const GPUUsed = (props) => {
 
   const getData = (GPUInfos) => {
     if (GPUInfos === undefined) return null;
-    console.log(GPUInfos);
+    // console.log(GPUInfos);
     return GPUInfos.filter((data) => {
       return data.isUsed === props.isUsed;
     }).map((data) => {
