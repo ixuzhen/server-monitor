@@ -40,6 +40,7 @@ public class JwtAuthenticationTokenFilter  extends OncePerRequestFilter {
             //e.printStackTrace();
             throw new RuntimeException("token非法");
         }
+        request.setAttribute("userid", userid);
         //从session中获取用户信息
         HttpSession session = request.getSession();
         LoginUser loginUser = (LoginUser) session.getAttribute(userid);

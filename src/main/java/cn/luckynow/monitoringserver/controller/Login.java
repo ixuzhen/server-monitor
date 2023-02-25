@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil;
 import cn.luckynow.monitoringserver.entity.LoginUser;
 import cn.luckynow.monitoringserver.entity.Result;
 import cn.luckynow.monitoringserver.entity.User;
+import cn.luckynow.monitoringserver.service.IMessageUserService;
 import cn.luckynow.monitoringserver.service.IUserService;
 import cn.luckynow.monitoringserver.service.LoginServcie;
 import cn.luckynow.monitoringserver.util.JwtUtil;
@@ -36,6 +37,9 @@ public class Login {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private IMessageUserService iMessageUserService;
+
     @PostMapping("/login")
     public Result login(@RequestBody String userData){
         JSONObject userDataJson = JSONUtil.parseObj(userData);
@@ -59,9 +63,10 @@ public class Login {
         boolean success = iUserService.saveUser(user);
         if(!success)
             return Result.failed("注册失败！！");
-
+        boolean success_message = iMessageUserService.saveMessageUser(user);
+        if(!success_message)
+            log.error("注册消息推送服务失败");
         String userId = user.getId().toString();
-
         HttpSession session = request.getSession();
         LoginUser loginUser = new LoginUser(user);
         session.setAttribute(userId,loginUser);

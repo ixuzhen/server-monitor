@@ -4,6 +4,7 @@ import axios from 'axios';
 import { isSuccess, paringDate } from '../../helper/utils';
 import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { API } from '../../request';
 
 const columns = [
   {
@@ -45,7 +46,7 @@ const GPUUsed = (props) => {
   const [GPUInfos, setGPUInfos] = useState([]);
 
   const loadHosts = async () => {
-    const res = await axios({
+    const res = await API({
       method: 'GET',
       url: '/server/usedGPU',
     }).then((response) => {

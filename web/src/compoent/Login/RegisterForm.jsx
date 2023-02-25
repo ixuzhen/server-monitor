@@ -8,6 +8,7 @@ const RegisterForm = () => {
   const onFinish = async (values) => {
     if (values.password !== values.confirmPsw) {
       showError('两次输入的密码不一致');
+      return;
     }
     const res = await LoginAPI.post('/register', {
       username: values.username,

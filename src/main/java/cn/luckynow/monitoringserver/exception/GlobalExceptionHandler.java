@@ -21,10 +21,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result customException(Exception e) {
-        //e.printStackTrace();
+
         //log.error(e.getCause().getMessage());
         log.error("-------------------------");
-        log.error(e.getMessage());
+        //log.error(e.getMessage());
+        e.printStackTrace();
         log.error("-------------------------");
         //WebUtils.initResponse(response);
         return Result.failed(e.getMessage());

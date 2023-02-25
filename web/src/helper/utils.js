@@ -41,3 +41,7 @@ export function showError(error) {
   toast.error('错误：' + error, showErrorOptions);
   console.error(error);
 }
+
+export function showSuccess(message) {
+  toast.success(message, showSuccessOptions);
+}

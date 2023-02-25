@@ -28,7 +28,11 @@ const items = [
   // getItem('主机列表', '/content', <PieChartOutlined />),
   getItem(<Link to='/gpuhost'>显卡信息</Link>, '/gpuhost', <DesktopOutlined />),
 
-  getItem('Option 3', '3', <ContainerOutlined />),
+  getItem(
+    <Link to='/message'>消息推送</Link>,
+    '/message',
+    <ContainerOutlined />
+  ),
   getItem('Navigation One', 'sub1', <MailOutlined />, [
     getItem('Option 5', '5'),
     getItem('Option 6', '6'),
