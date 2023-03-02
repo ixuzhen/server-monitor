@@ -1,6 +1,8 @@
 import requests
 import time
 from getInfo.getGPUInfo import GetGPUInfo
+from util.memory_util import get_memory
+from util.netstat import get_TCP_UDP_with_pid
 from util.network_util import get_host_ip
 from entity.message import Message
 import json
@@ -84,6 +86,13 @@ def get_disk_usage():
         res.append(dict(usage._asdict()))
     return res
 
+def get_TCP_UDP_with_pid_dict():
+    infos = get_TCP_UDP_with_pid()
+    res = []
+    for info in infos:
+        res.append(dict(info._asdict()))
+    return res
+
 def get_disk_io_counters():
     disk_counters = disk_io_counters()
     res = []
@@ -106,7 +115,12 @@ def send_all_message():
     # 硬盘读写平均速度
     disk_counters = get_disk_io_counters()
     message.disk_counters = disk_counters
-    
+    # 内存信息
+    memory = get_memory()
+    message.memory = dict(memory._asdict())
+    # 开放的端口信息
+    ports = get_TCP_UDP_with_pid_dict()
+    message.ports = ports
     js = json.dumps(message.__dict__,cls=MyEncoder)
     # print(js)
     headers = {'Content-Type': 'application/json', 'Connection': 'close'}
