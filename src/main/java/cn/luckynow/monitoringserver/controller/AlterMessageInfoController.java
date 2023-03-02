@@ -41,6 +41,7 @@ public class AlterMessageInfoController {
 
     @PostMapping("/email")
     public Result setEmail(@RequestBody String data){
+        // TODO：对邮箱的身份做校验，发送验证码的方式
         JSONObject dataJson = JSONUtil.parseObj(data);
         String email = (String) dataJson.get("email");
         boolean success = iMessageUserService.alterEmailAddress(email);

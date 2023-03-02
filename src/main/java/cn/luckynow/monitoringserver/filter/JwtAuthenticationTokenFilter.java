@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,8 @@ import java.util.Objects;
 @Component
 public class JwtAuthenticationTokenFilter  extends OncePerRequestFilter {
 
+    @Autowired
+    private ServletContext servletContext;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //获取token
@@ -42,8 +45,9 @@ public class JwtAuthenticationTokenFilter  extends OncePerRequestFilter {
         }
         request.setAttribute("userid", userid);
         //从session中获取用户信息
-        HttpSession session = request.getSession();
-        LoginUser loginUser = (LoginUser) session.getAttribute(userid);
+        //HttpSession session = request.getSession();
+        //LoginUser loginUser = (LoginUser) session.getAttribute(userid);
+        LoginUser loginUser = (LoginUser) servletContext.getAttribute(userid);
         if(Objects.isNull(loginUser)){
             throw new RuntimeException("用户未登录");
         }

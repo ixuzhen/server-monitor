@@ -20,13 +20,13 @@ const MessagePush = () => {
     const res = await API.get('/message/info');
     const { code, message, data } = res.data;
     if (isSuccess(code)) {
-      console.log(data);
       setEmail(data['email']);
       setPushWay(data['channel']);
       setUsername(data['username']);
       setFeishuUrl(data['feishuWebhookUrl']);
       setDingUrl(data['dingWebhookUrl']);
       setwechatUrl(data['wechatWebhookUrl']);
+      console.log(data);
     } else {
       showError('加载数据失败' + message);
     }

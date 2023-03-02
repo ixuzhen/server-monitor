@@ -42,9 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 对于登录接口 允许匿名访问
                 .antMatchers("/login","/register").anonymous()
-                // TODO: 这里消息推送的开发阶段先开启
                 // 所有人都能访问
-                .antMatchers("/push/**").permitAll()
+                .antMatchers("/push/**", "/client/**").permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         //把token校验过滤器添加到过滤器链中

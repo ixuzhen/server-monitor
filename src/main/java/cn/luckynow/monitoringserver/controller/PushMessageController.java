@@ -31,6 +31,8 @@ public class PushMessageController {
                               @RequestParam(value = "channel", required = false) String channel,
                               @RequestParam(value = "token", required = false) String token){
 
+        // TODO：url中有特殊字符会报错，如http://localhost:8080/push/xz?title={标题}&content={内容}，{}属于特殊符号，会报错
+
         // 根据用户名获取消息用户
         MessageUser messageUser = iMessageUserService.getMessageUserByName(username);
         if(messageUser==null)
@@ -46,6 +48,7 @@ public class PushMessageController {
         if(channel!=null && PushWay.map.containsKey(channel)){
             pushWay = PushWay.map.get(channel);
         }
+        // TODO: 对title和content做校验
         // 处理title
         if(title == null)
             title = "";
@@ -54,6 +57,7 @@ public class PushMessageController {
             content = "";
         // 发送消息
         String result = "";
+        // TODO:对发送的邮箱做校验
         if(pushWay == PushWay.EMAIL){
             result = new Email(javaMailSender).sendEmail(account, messageUser.getEmail(), title, content);
         }else if( pushWay == PushWay.FEISHU){

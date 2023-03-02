@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -39,6 +40,9 @@ public class Login {
 
     @Autowired
     private IMessageUserService iMessageUserService;
+
+    @Autowired
+    private ServletContext servletContext;
 
     @PostMapping("/login")
     public Result login(@RequestBody String userData){
@@ -67,9 +71,11 @@ public class Login {
         if(!success_message)
             log.error("注册消息推送服务失败");
         String userId = user.getId().toString();
-        HttpSession session = request.getSession();
+
         LoginUser loginUser = new LoginUser(user);
-        session.setAttribute(userId,loginUser);
+        //HttpSession session = request.getSession();
+        //session.setAttribute(userId,loginUser);
+        servletContext.setAttribute(userId,loginUser);
         String jwt = JwtUtil.createJWT(userId);
         HashMap<String, String> map = new HashMap<>();
         map.put("token", jwt);

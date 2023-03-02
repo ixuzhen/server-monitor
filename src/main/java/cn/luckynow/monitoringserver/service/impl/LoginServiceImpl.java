@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -28,7 +29,9 @@ public class LoginServiceImpl implements LoginServcie {
     HttpServletRequest request;
 
     @Autowired
-    private ApplicationContext applicationContext;
+    private ServletContext servletContext;
+
+
 
     @Override
     public Result login(User user) {
@@ -41,8 +44,10 @@ public class LoginServiceImpl implements LoginServcie {
         String userId = loginUser.getUser().getId().toString();
         String jwt = JwtUtil.createJWT(userId);
 
-        HttpSession session = request.getSession();
-        session.setAttribute(userId,loginUser);
+        //HttpSession session = request.getSession();
+        //session.setAttribute(userId,loginUser);
+
+        servletContext.setAttribute(userId,loginUser);
 
         HashMap<String, String> map = new HashMap<>();
         map.put("token", jwt);
@@ -54,8 +59,9 @@ public class LoginServiceImpl implements LoginServcie {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         String userId = loginUser.getUser().getId().toString();
-        HttpSession session = request.getSession();
-        session.removeAttribute(userId);
+        //HttpSession session = request.getSession();
+        //session.removeAttribute(userId);
+        servletContext.removeAttribute(userId);
         return Result.successWithMessage("退出成功");
     }
 }

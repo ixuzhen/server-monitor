@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Card, List, Space, Table, Tag } from 'antd';
-import axios from 'axios';
-import { isSuccess, paringDate } from '../../helper/utils';
+import { Card, Divider, List, Table, Tag } from 'antd';
+import { isSuccess, paringDate, showError } from '../../helper/utils';
 import { useParams } from 'react-router-dom';
 import { API } from '../../request';
+import Memory from './CommonInfoComponent/Memory';
 
 const pasringByte = (text) => {
   const kb = parseInt(text) / 1024;
@@ -16,6 +16,13 @@ const pasringByte = (text) => {
   else return <>{tb.toFixed(precision)} T</>;
 };
 
+const pasringSocketState = (state) => {
+  var str_state = socketState[state];
+  if (str_state === undefined) str_state = state;
+  return <>{str_state}</>;
+};
+
+// 磁盘信息表
 const columns = [
   {
     title: '挂载点',
@@ -59,11 +66,51 @@ const columns = [
   },
 ];
 
+// 端口信息表
+const columnsPort = [
+  {
+    title: '连接类型',
+    dataIndex: 'type',
+  },
+  {
+    title: '本地地址',
+    dataIndex: 'localAddress',
+  },
+  {
+    title: '本地端口',
+    dataIndex: 'localPort',
+  },
+  {
+    title: '远程地址',
+    dataIndex: 'remoteAddress',
+  },
+  {
+    title: '远程端口',
+    dataIndex: 'remotePort',
+  },
+  {
+    title: '状态',
+    dataIndex: 'state',
+    render: pasringSocketState,
+  },
+  {
+    title: 'pid',
+    dataIndex: 'pid',
+  },
+  {
+    title: '进程名称',
+    dataIndex: 'pname',
+  },
+];
+
+var socketState = { 1: 'established', 10: 'listening' }; // 定义一个字典
+
 const CommonInfo = () => {
   const { ip } = useParams();
   const [datas, setDatas] = useState([]);
 
-  const loadCommonInfo = async () => {
+  // 不用该方法了
+  const loadCommonInfo_old = async () => {
     await API({
       method: 'GET',
       url: '/server/disk/usage?ip=' + ip,
@@ -80,6 +127,18 @@ const CommonInfo = () => {
       });
   };
 
+  const loadCommonInfo = async () => {
+    const res = await API.get('/server/common?ip=' + ip);
+    console.log(res);
+    const { code, message, data } = res.data;
+    if (isSuccess(code)) {
+      setDatas(data);
+      // console.log(datas);
+    } else {
+      showError(message);
+    }
+  };
+
   useEffect(() => {
     loadCommonInfo()
       .then(() => {})
@@ -87,14 +146,41 @@ const CommonInfo = () => {
         console.log(reason);
       });
   }, []);
-
-  const parsingData = (datas) => {
+  // 不用该方法了
+  const parsingDataOld = (datas) => {
     if (datas === undefined) return [];
     return datas.map((data) => {
       data.key = data['mountpoint'];
       return data;
     });
   };
+
+  const parsingData = (diskInfo) => {
+    if (diskInfo === undefined) return [];
+    // console.log(diskInfo);
+    return diskInfo.map((data) => {
+      data.key = data['mountpoint'];
+      return data;
+    });
+  };
+
+  const parsingPortData = (PortInfo) => {
+    if (PortInfo === undefined) return [];
+    // console.log(PortInfo);
+    return PortInfo.map((data) => {
+      data.key = data['idPort'];
+      return data;
+    });
+  };
+
+  function parsingMemory() {
+    const memoryInfo = datas['memoryInfo'];
+    if (memoryInfo === undefined) return '';
+    const total = memoryInfo['total'] / 1024 / 1024 / 1024;
+    const available = memoryInfo['available'] / 1024 / 1024 / 1024;
+    const used = total - available;
+    return '' + used.toFixed(2) + ' G / ' + total.toFixed(2) + ' G';
+  }
 
   return (
     <div>
@@ -106,12 +192,16 @@ const CommonInfo = () => {
           {
             name: '最新上报日期',
             content:
-              datas.length > 0
-                ? paringDate(datas[0].dateDisk, 'YYYY-MM-DD HH:mm')
+              datas['diskUsageList'] !== undefined &&
+              datas['diskUsageList'].length > 0
+                ? paringDate(
+                    datas['diskUsageList'][0].dateDisk,
+                    'YYYY-MM-DD HH:mm'
+                  )
                 : '',
           },
           { name: '系统名称', content: 'Ubuntu' },
-          { name: '待定', content: '待定' },
+          { name: '内存使用', content: parsingMemory() },
         ]}
         renderItem={(item) => (
           <List.Item>
@@ -120,10 +210,19 @@ const CommonInfo = () => {
         )}
       />
 
+      {/*<Memory></Memory>*/}
+
       <h1 style={{ textAlign: 'left' }}>磁盘信息</h1>
       <Table
         columns={columns}
-        dataSource={parsingData(datas)}
+        dataSource={parsingData(datas['diskUsageList'])}
+        pagination={{ hideOnSinglePage: true }}
+      />
+      <Divider />
+      <h1 style={{ textAlign: 'left' }}>端口信息</h1>
+      <Table
+        columns={columnsPort}
+        dataSource={parsingPortData(datas['portLists'])}
         pagination={{ hideOnSinglePage: true }}
       />
     </div>

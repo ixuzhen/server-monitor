@@ -1,10 +1,9 @@
 package cn.luckynow.monitoringserver.controller;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import cn.luckynow.monitoringserver.entity.*;
-import cn.luckynow.monitoringserver.service.IDiskUsageService;
-import cn.luckynow.monitoringserver.service.IGpuInfoService;
-import cn.luckynow.monitoringserver.service.IGpuProcService;
-import cn.luckynow.monitoringserver.service.IHostsService;
+import cn.luckynow.monitoringserver.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,12 @@ public class ServerConroller {
 
     @Autowired
     private IDiskUsageService iDiskUsageService;
+
+    @Autowired
+    private IMemoryService iMemoryService;
+
+    @Autowired
+    private IPortService iPortService;
 
     @GetMapping("/hosts")
     public Result sendHostsInfo(){
@@ -80,6 +85,46 @@ public class ServerConroller {
         log.info("发送了硬盘用量信息");
         return Result.successWithData(diskUsageList);
     }
+
+    // 获取普通信息
+    @GetMapping("/common")
+    public Result sendCommonInfo(@RequestParam String ip){
+        JSONObject result = JSONUtil.createObj();
+        // 获取磁盘信息
+        QueryWrapper<DiskUsage> queryWrapperDisk = new QueryWrapper<>();
+        queryWrapperDisk.eq("ip", ip)
+                .apply("date_disk = (select Max(date_disk) from disk_usage where ip = '" + ip + "')");
+        List<DiskUsage> diskUsageList = iDiskUsageService.list(queryWrapperDisk);
+        if(diskUsageList!=null){
+            result.putOnce("diskUsageList", diskUsageList);
+            log.info("发送了硬盘用量信息");
+        }
+
+
+        // 获取内存信息
+        QueryWrapper<Memory> queryWrapperMemory = new QueryWrapper<>();
+        queryWrapperMemory.eq("ip", ip)
+                .apply("date = (select Max(date) from memory where ip = '" + ip + "')");
+        Memory memory = iMemoryService.getOne(queryWrapperMemory);
+        if(memory!=null){
+            result.putOnce("memoryInfo", memory);
+            log.info("发送了内存用量信息");
+        }
+
+        // 获取端口信息
+        QueryWrapper<Port> queryWrapperPort = new QueryWrapper<>();
+        queryWrapperPort.eq("ip", ip)
+                .apply("date = (select Max(date) from port where ip = '" + ip + "')");
+        List<Port> portList = iPortService.list(queryWrapperPort);
+        if(portList!=null){
+            result.putOnce("portLists", portList);
+            log.info("发送了端口信息");
+        }
+
+        return Result.successWithData(result);
+    }
+
+
 
     @GetMapping(value = {"/unusedGPU","usedGPU"})
     public Result sendUnusedGPUInfo(){
