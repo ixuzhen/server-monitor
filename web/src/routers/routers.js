@@ -11,6 +11,7 @@ import Register from '../compoent/Login/Register';
 // const Home = lazy(()=>import("./compoent/Home/Home"))
 import { history } from '../helper/history';
 import MessagePush from '../compoent/Content/message/MessagePush';
+import Terminal from '../compoent/Content/terminal/terminal';
 
 const withLoadingComponent = (comp) => (
   <React.Suspense fallback={<div>Loading...</div>}>{comp}</React.Suspense>
@@ -65,10 +66,18 @@ export default [
         ),
       },
       {
-        path: 'message',
+        path: '/message',
         element: withLoadingComponent(
           <PrivateRoute>
             <MessagePush />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/terminal',
+        element: withLoadingComponent(
+          <PrivateRoute>
+            <Terminal />
           </PrivateRoute>
         ),
       },

@@ -33,6 +33,11 @@ const items = [
     '/message',
     <ContainerOutlined />
   ),
+  getItem(
+    <Link to='/terminal'>远程终端</Link>,
+    '/terminal',
+    <ContainerOutlined />
+  ),
   getItem('Navigation One', 'sub1', <MailOutlined />, [
     getItem('Option 5', '5'),
     getItem('Option 6', '6'),

@@ -49,5 +49,6 @@
     "singleQuote": true,
     "jsxSingleQuote": true
   },
-  "proxy": "http://localhost:8080"
+
+  "proxy": "http://125.216.243.209:8080"
 }
