@@ -82,9 +82,11 @@ services:
       - --spring.datasource.username=root
       # MySQL 的密码，请保证与下方 MYSQL_ROOT_PASSWORD 的变量值一致。
       - --spring.datasource.password=123456
-      # 外部访问地址，请根据实际需要修改
-      - --spring.mail.username=xuzhen5678@163.com
-      - --spring.mail.username=DJDPSAQQYMXOFNLW
+      
+      # 发生消息的邮箱，验证码的邮箱
+      - --spring.mail.username=xuzhe
+      # 发生消息的邮箱，验证码的密码
+      - --spring.mail.password=DfFjk
 
 
   mysql_monitor:
@@ -103,7 +105,7 @@ services:
     networks:
       - monitor_net
     environment:
-      # 请修改此密码，并对应修改上方 Halo 服务的 SPRING_R2DBC_PASSWORD 变量值
+      # 请修改此密码，并对应修改上方 monitor_springboot 服务的 spring.datasource.password 变量值
       - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_DATABASE=monitoring
 
