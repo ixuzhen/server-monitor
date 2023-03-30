@@ -51,16 +51,85 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 + [ ] client 端自动更新功能
 + [ ] 服务器开放的端口
 + [ ] 清理数据 server 端数据库的功能
-
 + [ ] 远程文件管理
 
 
 ## 部署
 ### 基于 Docker 进行部署
-TODO
+1. 根据自己需要修改配置文件 docker-compose.yaml 文件
 
-### 手动部署
-TODO
+
+```
+version: "3"
+
+services:
+  monitor_springboot:
+#    image: monitor:0.0.1
+    build:
+      context: ./
+      dockerfile: Dockerfile_SpringBoot
+    container_name: monitor
+    ports:
+      - "8080:8080"
+    networks:
+      - monitor_net
+    depends_on:
+#      - redis
+      - mysql_monitor
+    command:
+      - --spring.datasource.url=jdbc:mysql://mysql_monitor:3306/monitoring?serverTimezone=GMT%2B8&characterEncoding=utf-8&useSSL=false
+      ## MySQL 用户名
+      - --spring.datasource.username=root
+      # MySQL 的密码，请保证与下方 MYSQL_ROOT_PASSWORD 的变量值一致。
+      - --spring.datasource.password=123456
+      # 外部访问地址，请根据实际需要修改
+      - --spring.mail.username=xuzhen5678@163.com
+      - --spring.mail.username=DJDPSAQQYMXOFNLW
+
+
+  mysql_monitor:
+    image: mysql:8.0.31
+    container_name: mysql_monitor
+    ports:
+      - "3307:3306"
+    volumes:
+      # 数据挂载
+      - /root/mysql/data/:/var/lib/mysql/
+      # 配置挂载
+      - /root/mysql/conf/:/etc/mysql/conf.d/
+      # 初始化目录挂载
+      - /root/mysql/init/:/docker-entrypoint-initdb.d/
+
+    networks:
+      - monitor_net
+    environment:
+      # 请修改此密码，并对应修改上方 Halo 服务的 SPRING_R2DBC_PASSWORD 变量值
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=monitoring
+
+
+  monitor_react:
+    #    image: monitor:0.0.1
+    build:
+      context: ./
+      dockerfile: Dockerfile_React
+    container_name: react_monitor
+    ports:
+      - "80:80"
+    networks:
+      - monitor_net
+    depends_on:
+      - monitor_springboot
+
+networks:
+  monitor_net:
+```
+2. 运行命令
+```
+docker-compose up -d
+```
+
+
 
 ## 配置
 TODO

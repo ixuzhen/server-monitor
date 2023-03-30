@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/push")
 @Slf4j
+@CrossOrigin
 public class PushMessageController {
 
     @Autowired

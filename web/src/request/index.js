@@ -2,7 +2,8 @@
 import axios from 'axios';
 import { isSuccess, showError } from '../helper/utils';
 
-const baseURL = '';
+const baseURL = 'http://125.216.243.209:8080';
+// const baseURL = '';
 
 const LoginAPI = axios.create({
   // 基本请求路径的抽取
