@@ -56,7 +56,7 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 
 ## 部署
 ### 基于 Docker 进行部署
-1. 根据自己需要修改配置文件 docker-compose.yaml 文件
+1. clone 该项目，根据自己需要修改配置文件 docker-compose.yaml 文件
 
 
 ```

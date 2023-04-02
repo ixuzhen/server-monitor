@@ -50,5 +50,5 @@
     "jsxSingleQuote": true
   },
 
-  "proxy": "http://125.216.243.209:8080"
+  "proxy": "http://127.0.0.1:8080"
 }

@@ -16,6 +16,18 @@ spring:
     # 邮箱服务器端口
     port: 25
 
+  # redis 配置
+  redis:
+    host: 127.0.0.1
+    port: 32770
+    password: redispw
+    lettuce:
+      pool:
+        max-active: 8 # 最大连接
+        max-idle: 8 # 最大空闲连接
+        min-idle: 0 # 最小空闲连接
+        max-wait: 100 # 连接等待时间
+
 
 # 配置mybatis规则
 mybatis:
