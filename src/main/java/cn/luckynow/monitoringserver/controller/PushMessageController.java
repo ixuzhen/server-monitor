@@ -38,9 +38,9 @@ public class PushMessageController {
         MessageUser messageUser = iMessageUserService.getMessageUserByName(username);
         if(messageUser==null)
             return Result.failed("没有此用户名");
-        log.error(messageUser.toString());
-        log.error(title);
-        log.error(content);
+        //log.error(messageUser.toString());
+        //log.error(title);
+        //log.error(content);
         // TODO：检测 token
 
 

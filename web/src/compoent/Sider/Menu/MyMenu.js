@@ -38,9 +38,9 @@ const items = [
     '/terminal',
     <ContainerOutlined />
   ),
-  getItem('Navigation One', 'sub1', <MailOutlined />, [
-    getItem('Option 5', '5'),
-    getItem('Option 6', '6'),
+  getItem('管理', 'sub1', <MailOutlined />, [
+    getItem(<Link to='/warningPush'>警告推送</Link>, 'warning push'),
+    getItem('人员管理', '6'),
     getItem('Option 7', '7'),
     getItem('Option 8', '8'),
   ]),

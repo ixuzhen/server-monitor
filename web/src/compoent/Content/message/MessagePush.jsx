@@ -101,7 +101,7 @@ const MessagePush = () => {
   }
 
   async function wechatClick() {
-    const res = await API.post('/message/wechat', {
+    const res = await API.post('/ma/wechat', {
       url: wechatUrl,
       // "ser"
     });

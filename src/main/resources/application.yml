@@ -19,7 +19,7 @@ spring:
   # redis 配置
   redis:
     host: 127.0.0.1
-    port: 32770
+    port: 32768
     password: redispw
     lettuce:
       pool:

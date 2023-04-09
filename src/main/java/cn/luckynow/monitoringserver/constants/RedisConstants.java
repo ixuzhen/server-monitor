@@ -10,4 +10,10 @@ public class RedisConstants {
     // token有效期，30 分钟
     public static final Long LOGIN_USER_TTL = 30L;
 
+    // 心跳数据存放在 redis 的名字中hash的名字
+    public static final String HEART_BEAT_KEY = "heart:beat:";
+    // 心跳数据有效期，10 分钟
+    public static final Long HEART_BEAT_TTL = 10L;
+
+
 }

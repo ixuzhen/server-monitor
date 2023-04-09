@@ -1,6 +1,7 @@
 package cn.luckynow.monitoringserver.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -18,7 +19,6 @@ import lombok.Data;
  */
 @ApiModel(value = "Host对象", description = "")
 @Data
-
 public class Host implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,6 +29,9 @@ public class Host implements Serializable {
     private String ip;
 
     private Timestamp dateHost;
+    // 当前机器是否在线
+    @TableField(exist = false)
+    private Boolean isOnline = false;
 
 
 }

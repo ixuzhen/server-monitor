@@ -33,4 +33,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new RuntimeException("已有用户，不能注册");
         return save(user);
     }
+
 }

@@ -39,7 +39,7 @@ public class FeiShuRobot {
         HttpEntity<String> request = new HttpEntity<>(sendStr, headers);
 
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(webhook, request, String.class);
-        log.error(responseEntity.toString());
+        //log.error(responseEntity.toString());
         return responseEntity.toString();
     }
 

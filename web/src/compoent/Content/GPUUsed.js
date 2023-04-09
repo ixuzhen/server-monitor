@@ -72,7 +72,7 @@ const GPUUsed = (props) => {
       return data.isUsed === props.isUsed;
     }).map((data) => {
       data.key = uuidv4();
-      data.key = data.memory =
+      data.memory =
         data['memoryUsed'].toString() + ' MB / ' + data['memoryTotal'] + ' MB';
       data.power =
         data['powerUsage'].toString() +

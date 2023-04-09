@@ -4,11 +4,13 @@ package cn.luckynow.monitoringserver.controller;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import cn.luckynow.monitoringserver.constants.RedisConstants;
 import cn.luckynow.monitoringserver.entity.*;
 import cn.luckynow.monitoringserver.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +42,9 @@ public class ClientController {
 
     @Autowired IPortService iPortService;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
 
     @PostMapping("/data")
     public Result<Object> receiveAllData(@RequestBody String allData) {
@@ -61,6 +66,22 @@ public class ClientController {
             this.processPortInfo(allDataJson, "ports", ip, date);
 
         return Result.successWithMessage("成功获取到全部数据");
+    }
+
+    /**
+     * 获取心跳数据，存入Redis中
+     * @param heartBeatData
+     */
+    @PostMapping("/heartbeat")
+    public Result<Object> receiveHeartBeat(@RequestBody String heartBeatData) {
+        JSONObject jsonObject = JSONUtil.parseObj(heartBeatData);
+        String ip = jsonObject.get("ip", String.class);
+        Timestamp date = new Timestamp(jsonObject.get("date", Long.class) * 1000);
+        String key = RedisConstants.HEART_BEAT_KEY + ip;
+        stringRedisTemplate.opsForValue().set(key, String.valueOf(date.getTime()));
+        stringRedisTemplate.expire(key, RedisConstants.HEART_BEAT_TTL, java.util.concurrent.TimeUnit.MINUTES);
+        log.info("成功获取到心跳数据：{}", heartBeatData);
+        return Result.successWithMessage("成功获取到心跳数据");
     }
 
 

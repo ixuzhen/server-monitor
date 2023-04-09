@@ -12,6 +12,7 @@ import Register from '../compoent/Login/Register';
 import { history } from '../helper/history';
 import MessagePush from '../compoent/Content/message/MessagePush';
 import Terminal from '../compoent/Content/terminal/terminal';
+import WarningPush from '../compoent/Content/WarningPush/WarningPush';
 
 const withLoadingComponent = (comp) => (
   <React.Suspense fallback={<div>Loading...</div>}>{comp}</React.Suspense>
@@ -78,6 +79,14 @@ export default [
         element: withLoadingComponent(
           <PrivateRoute>
             <Terminal />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/warningPush',
+        element: withLoadingComponent(
+          <PrivateRoute>
+            <WarningPush />
           </PrivateRoute>
         ),
       },

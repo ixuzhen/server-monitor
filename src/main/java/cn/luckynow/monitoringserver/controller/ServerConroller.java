@@ -1,12 +1,15 @@
 package cn.luckynow.monitoringserver.controller;
 
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import cn.luckynow.monitoringserver.constants.RedisConstants;
 import cn.luckynow.monitoringserver.entity.*;
 import cn.luckynow.monitoringserver.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -37,10 +40,23 @@ public class ServerConroller {
     @Autowired
     private IPortService iPortService;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     @GetMapping("/hosts")
     public Result sendHostsInfo(){
         List<Host> list = iHostsService.list();
         log.info("发送了主机列表信息");
+        // 判断机器是否在线
+        for (Host host : list) {
+            String ip = host.getIp();
+            String key = RedisConstants.HEART_BEAT_KEY + ip;
+            if (BooleanUtil.isTrue(stringRedisTemplate.hasKey(key))){
+                host.setIsOnline(true);
+            }else {
+                host.setIsOnline(false);
+            }
+        }
         return Result.successWithData(list);
     }
 

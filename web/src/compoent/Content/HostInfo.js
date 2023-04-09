@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, Space, Table, Tag } from 'antd';
-import axios from 'axios';
-import { isSuccess } from '../../helper/utils';
+import { isSuccess, paringDate } from '../../helper/utils';
 import { Link } from 'react-router-dom';
 import { API } from '../../request';
 
@@ -27,13 +26,16 @@ const columns = [
     render: (_, { tags }) => (
       <>
         {tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
-          if (tag === 'loser') {
+          let color = 'geekblue';
+          if (tag === '在线') {
+            color = 'green';
+          }
+          if (tag === '掉线') {
             color = 'volcano';
           }
           return (
             <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+              {tag}
             </Tag>
           );
         })}
@@ -74,15 +76,23 @@ function HostInfo(props) {
       });
   }, []);
 
-  const getData = (hosts) => {
-    if (hosts !== undefined) {
-      const res = hosts.map((h) => {
-        h.key = h.idHost;
-        h.date = '2022-12-04 22:53';
-        h.tags = ['ok'];
+  const getData = (datas) => {
+    // console.log(datas);
+    if (datas !== undefined) {
+      return datas.map((h) => {
+        h.key = h['idHost'];
+        // paringDate(data['dateGpu'].toString(), 'YYYY-MM-DD HH:mm')
+        h.date =
+          h['dateHost'] === null
+            ? ' '
+            : paringDate(h['dateHost'].toString(), 'YYYY-MM-DD HH:mm');
+        if (h['isOnline']) {
+          h.tags = ['在线'];
+        } else {
+          h.tags = ['掉线'];
+        }
         return h;
       });
-      return res;
     }
     return null;
   };
