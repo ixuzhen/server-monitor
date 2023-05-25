@@ -12,10 +12,10 @@ services:
     networks:
       - monitor_net
     depends_on:
-#      - redis
-      - mysql_monitor
+      - monitor_redis
+      - monitor_mysql
     command:
-      - --spring.datasource.url=jdbc:mysql://mysql_monitor:3306/monitoring?serverTimezone=GMT%2B8&characterEncoding=utf-8&useSSL=false
+      - --spring.datasource.url=jdbc:mysql://monitor_mysql:3306/monitoring?serverTimezone=GMT%2B8&characterEncoding=utf-8&useSSL=false
       - --spring.datasource.username=root
       # MySQL 的密码，请保证与下方 MYSQL_ROOT_PASSWORD 的变量值一致。
       - --spring.datasource.password=123456
@@ -27,9 +27,9 @@ services:
       - --spring.mail.password=D
 
 
-  mysql_monitor:
+  monitor_mysql:
     image: mysql:8.0.31
-    container_name: mysql_monitor
+    container_name: monitor_mysql
     ports:
       - "3307:3306"
     volumes:
@@ -66,6 +66,21 @@ services:
       - monitor_net
     depends_on:
       - monitor_springboot
+
+
+  monitor_redis:
+    image: redis:6.2.6
+    container_name: redis_monitor
+    ports:
+      - "6379:6379"
+    volumes:
+      - /root/redis/data:/data
+      - /root/redis/conf/redis.conf:/etc/redis/redis.conf
+    networks:
+      - monitor_net
+    environment:
+        - TZ=Asia/Shanghai
+    command: ["redis-server","/etc/redis/redis.conf"]
 
 networks:
   monitor_net:

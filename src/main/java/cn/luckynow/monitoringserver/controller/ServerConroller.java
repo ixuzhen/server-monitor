@@ -180,7 +180,7 @@ public class ServerConroller {
             // 将设置好的 GPU 是否使用的信息集合到一起
             allGpuInfo.addAll(gpuList);
         }
-        System.out.println("发送了是否使用的GPU信息");
+        log.info("发送了是否使用的GPU信息");
         return Result.successWithData(allGpuInfo);
     }
 

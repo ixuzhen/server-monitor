@@ -1,14 +1,17 @@
-package cn.luckynow.monitoringserver.message.common;
+package cn.luckynow.monitoringserver.message.common.impl;
 
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import cn.luckynow.monitoringserver.entity.MessageUser;
+import cn.luckynow.monitoringserver.message.common.ISendMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import javax.crypto.Mac;
@@ -18,9 +21,10 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 @Slf4j
-public class FeiShuRobot {
+@Component
+public class FeiShuRobot implements ISendMessage {
 
-    public static String sendMessage(String webhook, String secret ,String title, String body) {
+    public static String sendFeiShuMessage(String webhook, String secret ,String title, String body) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -60,4 +64,8 @@ public class FeiShuRobot {
         return sign;
     }
 
+    @Override
+    public String sendMessage(MessageUser messageUser, String titile, String content) {
+        return sendFeiShuMessage(messageUser.getFeishuWebhookUrl(), messageUser.getFeishuWebhookSecret(), titile, content);
+    }
 }

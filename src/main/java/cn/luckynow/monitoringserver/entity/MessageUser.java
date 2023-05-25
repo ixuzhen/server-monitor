@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.data.relational.core.sql.In;
 
 /**
  * <p>
@@ -31,7 +32,7 @@ public class MessageUser implements Serializable {
     private String token;
 
     @ApiModelProperty("推送方式")
-    private String channel;
+    private Integer channel;
 
     @ApiModelProperty("要推送的邮箱")
     private String email;
@@ -72,11 +73,11 @@ public class MessageUser implements Serializable {
     public void setToken(String token) {
         this.token = token;
     }
-    public String getChannel() {
+    public Integer getChannel() {
         return channel;
     }
 
-    public void setChannel(String channel) {
+    public void setChannel(Integer channel) {
         this.channel = channel;
     }
     public String getEmail() {
