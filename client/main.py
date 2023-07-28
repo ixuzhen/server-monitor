@@ -168,6 +168,7 @@ def send_heartbeat():
 
 
 def start():
+    send_all_message()
     scheduler = BlockingScheduler()
     # 定时发送所以信息
     scheduler.add_job(send_all_message, "interval", seconds=send_message_interval)
@@ -177,5 +178,6 @@ def start():
 
 
 if __name__ == '__main__':
+    print("start")
     start()
 
