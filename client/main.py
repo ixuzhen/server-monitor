@@ -25,7 +25,7 @@ with open(config_file_path, 'r') as file:
 # 现在，config_data变量将包含YAML文件中的配置数据
 # 可以通过字典键值来访问配置信息，例如：
 server_address = config_data['server_address'] + '/client'
-# server_address = 'http://125.216.243.40:8080/client'
+# server_address = 'http://225.216.243.40:8080/client'
 
 send_message_interval = config_data['send_message_interval']
 send_hearbeat_interval = config_data['send_hearbeat_interval']
