@@ -88,7 +88,7 @@ def get_gpu_proc_info():
             # [0, 1193282, '/raid2/xz/', '/raid/anaconda3/bin/python3.', 'C', 'python', 8005]
             results.append(GPUProcInfo(gpu_proc_info[0], gpu_proc_info[1], gpu_proc_info[2],
                                                      gpu_proc_info[3], gpu_proc_info[4], gpu_proc_info[5],
-                                                     gpu_proc_info[6]).__dict__)
+                                                     gpu_proc_info[6], gpu_proc_info[7]).__dict__)
     return results
     
 def get_gpu_common_info():
@@ -179,5 +179,5 @@ def start():
 
 if __name__ == '__main__':
     print("start")
-    start()
-
+    # start()
+    send_all_message()

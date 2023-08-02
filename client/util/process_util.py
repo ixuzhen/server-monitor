@@ -1,6 +1,6 @@
-
+from util.comment_util import sh
 import os
-
+import re
 procfs_path = '/proc'
 
 
@@ -11,6 +11,16 @@ def get_cwd(pid):
         return ''
     return path
 
+def get_start_time_by_pid(pid):
+    try:
+        output = sh(f'ps -o lstart -p {pid}')
+        lines = output.split('\n')
+        if len(lines) < 2:
+            return ''
+        return lines[1].strip()
+    except Exception as e:
+        print(e)
+        return ''
 
 def get_exe(pid):
     try:
