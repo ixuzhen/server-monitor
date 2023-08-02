@@ -68,10 +68,12 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 <img src="images/connectInfo.png">
 
 ## 部署
-### 基于 Docker 进行部署
-1. clone 该项目，根据自己需要修改配置文件 docker-compose.yaml 文件
-
-
+### 基于 Docker 进行部署接收端
+1. clone 该项目
+```aidl
+git clone https://github.com/ixuzhen/server-monitor.git
+```
+2. 根据自己需要修改配置文件 docker-compose.yaml 文件，不修改使用默认配置也可以跑起来（如果修改了 MySQL 或者 Redis 的信息，同时也需要修改 SpringBoot 的配置文件相应的配置）。
 ```
 version: "3"
 
@@ -139,17 +141,33 @@ services:
 networks:
   monitor_net:
 ```
-2. 运行命令
+3. 运行命令
 ```
 docker-compose up -d
 ```
 
-## python 环境依赖
+### 部署发送端
+1. clone 该项目
+```aidl
+git clone https://github.com/ixuzhen/server-monitor.git
+cd ./server-monitor/client
+```
+2. 修改配置文件 config.yaml, 必须修改第一个，修改成自己的接收端服务器地址
+```
+# 中心服务器地址
+server_address: http://225.216.243.111:8080
+# 发送本机服务器信息的间隔时间，单位是秒
+send_message_interval: 600
+# 发送心跳包的间隔时间，单位是秒
+send_hearbeat_interval: 60
+```
+3. 安装依赖并运行
 ```
 pip install pynvml;
 pip install apscheduler;
 pip install requests;
-```
 
+python main.py
+```
 ## 配置
 TODO
