@@ -1,9 +1,10 @@
 from util.comment_util import sh
 from util.process_util import get_cwd, get_exe
+from util.process_util import get_start_time_by_pid
 
 
 def get_gpu_processes_info_by_id(index):
-    # 返回一个 GPU 的进程数组，每一个进程[index, pid, cwd, exe, type, process name, gpu memory usage]
+    # 返回一个 GPU 的进程数组，每一个进程[index, pid, cwd, exe, type, process name, gpu memory usage, start_time]
     # index 标记哪一张显卡
     res = []
     output = sh(f'nvidia-smi -q --display=PIDS --id={index}')
@@ -25,7 +26,9 @@ def get_gpu_processes_info_by_id(index):
             list_proc.append(line.split()[-1])
         if line.startswith('Used GPU Memory'):
             list_proc.append(int(line.split()[-2]))
+            list_proc.append(get_start_time_by_pid(pid))
             res.append(list_proc.copy())
+
     return res
 
 

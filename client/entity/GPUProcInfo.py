@@ -9,7 +9,9 @@ class GPUProcInfo:
             exe,
             typeProc,
             nameProc,
-            memoryUsed,):
+            memoryUsed,
+            startTime
+                 ):
         self.indexGpu = indexGpu
         self.pid = pid
         self.typeProc = typeProc
@@ -17,5 +19,6 @@ class GPUProcInfo:
         self.memoryUsed = memoryUsed
         self.cwd = cwd
         self.exe = exe
+        self.startTime = startTime
 
 

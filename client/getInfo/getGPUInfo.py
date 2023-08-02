@@ -6,6 +6,7 @@ import pynvml
 from util.gpu_util import get_gpu_processes_info_by_id, get_gpu_num
 
 
+
 class GetGPUInfo:
 
     def __init__(self):
