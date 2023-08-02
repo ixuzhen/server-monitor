@@ -33,6 +33,8 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 </p>
 
 ## 代办
++ [ ] 一开始就发送心跳
++ [ ] 增加进程的开始时间
 + [x] 内存信息
 + [x] GPU 信息
 + [x] GPU 进程信息
@@ -42,6 +44,7 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 + [x] 开放的端口信息
 + [x] 消息推送功能
 + [x] 硬盘不足报警
++ [ ] SSH 的版本
 + [ ] CPU 信息
 + [ ] 网络负载信息
 + [ ] 显卡空闲提醒
@@ -131,7 +134,12 @@ networks:
 docker-compose up -d
 ```
 
-
+## python 环境依赖
+```
+pip install pynvml;
+pip install apscheduler;
+pip install requests;
+```
 
 ## 配置
 TODO

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/server")
@@ -141,12 +142,24 @@ public class ServerConroller {
     }
 
 
-
+    /**
+     * 发送未使用的 GPU 信息, 主机必须在线
+     * @return
+     */
     @GetMapping(value = {"/unusedGPU","usedGPU"})
     public Result sendUnusedGPUInfo(){
         // 得到所有许可的主机
         List<Host> hosts = iHostsService.list();
-
+        // 过滤掉不在线的主机
+        hosts = hosts.stream().filter(host -> {
+            String ip = host.getIp();
+            String key = RedisConstants.HEART_BEAT_KEY + ip;
+            if (BooleanUtil.isTrue(stringRedisTemplate.hasKey(key))){
+                return true;
+            }else {
+                return false;
+            }
+        }).collect(Collectors.toList());
         List<GpuInfo> allGpuInfo = new ArrayList<>();
 
         // 便利所有许可的主机中未使用的显卡
