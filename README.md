@@ -35,6 +35,7 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 ## 代办
 + [ ] 一开始就发送心跳
 + [ ] 增加进程的开始时间
++ [ ] docker 容器的监控
 + [x] 内存信息
 + [x] GPU 信息
 + [x] GPU 进程信息
@@ -56,6 +57,10 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 + [ ] 清理数据 server 端数据库的功能
 + [ ] 远程文件管理
 
+## 展示
+<img src="./images/diskInfo.png">
+<img src="./images/gpuInfo.png">
+<img src="images/connectInfo.png">
 
 ## 部署
 ### 基于 Docker 进行部署
