@@ -33,6 +33,9 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 </p>
 
 ## 代办
++ [ ] 一开始就发送心跳
++ [ ] 增加进程的开始时间
++ [ ] docker 容器的监控
 + [x] 内存信息
 + [x] GPU 信息
 + [x] GPU 进程信息
@@ -42,6 +45,7 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 + [x] 开放的端口信息
 + [x] 消息推送功能
 + [x] 硬盘不足报警
++ [ ] SSH 的版本
 + [ ] CPU 信息
 + [ ] 网络负载信息
 + [ ] 显卡空闲提醒
@@ -53,6 +57,15 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 + [ ] 清理数据 server 端数据库的功能
 + [ ] 远程文件管理
 
+## 主要功能
+1. 监控服务器的各项信息，和其他监控项目的不同是可以监控 GPU 的信息，适合实验室管理深度学习服务器的人员。
+2. 消息推送，通过统一的 api 接口整合了企业微信、钉钉、飞书和邮件的推送功能。
+3. 如果配置了上边的消息推送功能，如果发送服务器断连、硬盘不足、GPU 空闲等情况会发送邮件提醒（也可以通过企业微信、钉钉、飞书推送）。
+
+## 展示
+<img src="./images/diskInfo.png">
+<img src="./images/gpuInfo.png">
+<img src="images/connectInfo.png">
 
 ## 部署
 ### 基于 Docker 进行部署
@@ -131,7 +144,12 @@ networks:
 docker-compose up -d
 ```
 
-
+## python 环境依赖
+```
+pip install pynvml;
+pip install apscheduler;
+pip install requests;
+```
 
 ## 配置
 TODO
