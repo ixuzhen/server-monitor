@@ -11,8 +11,26 @@ from util.disk_util import get_all_disk_usage, disk_io_counters
 from apscheduler.schedulers.blocking import BlockingScheduler
 from datetime import datetime
 import time
+import yaml
 
-server_address = 'http://125.216.243.36:8080/client'
+# 获取本机ip
+ip = get_host_ip()
+# 指定配置文件路径
+config_file_path = './config.yaml'
+
+# 读取YAML文件
+with open(config_file_path, 'r') as file:
+    config_data = yaml.safe_load(file)
+
+# 现在，config_data变量将包含YAML文件中的配置数据
+# 可以通过字典键值来访问配置信息，例如：
+server_address = config_data['server_address'] + '/client'
+# server_address = 'http://225.216.243.40:8080/client'
+
+send_message_interval = config_data['send_message_interval']
+send_hearbeat_interval = config_data['send_hearbeat_interval']
+
+
 
 # TypeError: Object of type 'bytes' is not JSON serializable
 # 因为有上边这个错误，所以加这么一个类
@@ -102,7 +120,7 @@ def get_disk_io_counters():
 
 def send_all_message():
     # 通用信息
-    ip = get_host_ip()
+    
     date = int(time.time())
     message = Message(ip, date)
     # GPU 信息
@@ -132,15 +150,34 @@ def send_all_message():
     else:
         print(response.text)
 
+def send_heartbeat():
+    # 通用信息
+    
+    date = int(time.time())
+    message = Message(ip, date)
+    message_json = json.dumps(message.__dict__,cls=MyEncoder)
+    # print(js)
+    headers = {'Content-Type': 'application/json', 'Connection': 'close'}
+    try:
+        # post的时候，将data字典形式的参数用json包转换成json格式。
+        response = requests.post(url=server_address + '/heartbeat', data=message_json, timeout=1)
+    except BaseException as err:
+        print(f'error: {err}')
+    else:
+        print(response.text)
 
 
+def start():
+    send_all_message()
+    scheduler = BlockingScheduler()
+    # 定时发送所以信息
+    scheduler.add_job(send_all_message, "interval", seconds=send_message_interval)
+    # 定时发送心跳
+    scheduler.add_job(send_heartbeat, "interval", seconds=send_hearbeat_interval)
+    scheduler.start()
 
 
 if __name__ == '__main__':
-    
-    # scheduler = BlockingScheduler()
-    # # scheduler.add_job(send_all_message, "interval", minutes=5)
-    # scheduler.add_job(send_all_message, "interval", seconds=5)
-    # scheduler.start()
-    
-    send_all_message()
+    print("start")
+    start()
+
