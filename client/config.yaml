@@ -1,5 +1,5 @@
 # 中心服务器地址
-server_address: http://125.216.243.111:8083
+server_address: http://125.216.243.111:8080
 # 发送本机服务器信息的间隔时间，单位是秒
 send_message_interval: 600
 # 发送心跳包的间隔时间，单位是秒
