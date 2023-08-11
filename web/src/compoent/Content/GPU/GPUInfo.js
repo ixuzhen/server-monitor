@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { isSuccess, paringDate } from '../../helper/utils';
+import { isSuccess, paringDate } from '../../../helper/utils';
 
 import { Card, List, Table } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
-import { API } from '../../request';
+import { API } from '../../../request';
 
 const columns_gpu = [
   {
@@ -42,7 +42,7 @@ const columns_gpu = [
 const columns_proc = [
   {
     title: '显卡索引',
-    dataIndex: 'index_prc',
+    dataIndex: 'indexGpu',
   },
   {
     title: 'PID',
@@ -51,11 +51,14 @@ const columns_proc = [
 
   {
     title: '占用显存',
-    dataIndex: 'memory_proc',
+    dataIndex: 'memoryUsed',
+    render: (text) => {
+      return text + ' MB';
+    },
   },
   {
     title: '进程名称',
-    dataIndex: 'name_proc',
+    dataIndex: 'nameProc',
   },
   {
     title: '工作目录',
@@ -64,11 +67,16 @@ const columns_proc = [
       return text === '' ? '无法获取' : text;
     },
   },
-  // {
-  //     title: '指令',
-  //     dataIndex: 'exe',
-  //
-  // },
+  {
+    title: '开始时间',
+    dataIndex: 'startTime',
+    render: (text) => {
+      if (text === '' || text === undefined || text === null) {
+        return '';
+      }
+      return paringDate(text.toString(), 'YYYY-MM-DD HH:mm');
+    },
+  },
 ];
 
 const GPUInfo = () => {
@@ -108,6 +116,8 @@ const GPUInfo = () => {
         console.log(reason);
       });
   }, []);
+
+  // TODO:待优化
   const columns_name = [
     'key',
     'index',
@@ -160,36 +170,45 @@ const GPUInfo = () => {
     }
     return null;
   };
+  // 已抛弃
+  // const columns_proc_name = [
+  //   'index_prc',
+  //   'pid',
+  //   'cwd',
+  //   'memory_proc',
+  //   'name_proc',
+  // ];
+  // const gpuinfo_proc_name = [
+  //   'indexGpu',
+  //   'pid',
+  //   'cwd',
+  //   'memoryUsed',
+  //   'nameProc',
+  // ];
+  // const suffix_proc = ['', '', '', ' MB', '', ''];
+  //
+  // const getProcData = (gpuprosinfos) => {
+  //   if (gpuprosinfos === undefined) return [];
+  //   // console.log(gpuprosinfos);
+  //   const res = gpuprosinfos.map((one_info) => {
+  //     let table_item = {};
+  //     for (let i = 0; i < columns_proc_name.length; i++) {
+  //       table_item[columns_proc_name[i]] =
+  //         one_info[gpuinfo_proc_name[i]].toString() + suffix_proc[i];
+  //     }
+  //     table_item.key = uuidv4();
+  //     // console.log(table_item);
+  //     return table_item;
+  //   });
+  //   return res;
+  // };
 
-  const columns_proc_name = [
-    'index_prc',
-    'pid',
-    'cwd',
-    'memory_proc',
-    'name_proc',
-  ];
-  const gpuinfo_proc_name = [
-    'indexGpu',
-    'pid',
-    'cwd',
-    'memoryUsed',
-    'nameProc',
-  ];
-  const suffix_proc = ['', '', '', ' MB', ''];
-
-  const getProcData = (gpuprosinfos) => {
-    if (gpuprosinfos === undefined) return [];
-
-    const res = gpuprosinfos.map((one_info) => {
-      let table_item = {};
-      for (let i = 0; i < columns_proc_name.length; i++) {
-        table_item[columns_proc_name[i]] =
-          one_info[gpuinfo_proc_name[i]].toString() + suffix_proc[i];
-      }
-      table_item.key = uuidv4();
-      return table_item;
+  const getProcDataNew = (gpuprosinfos) => {
+    // console.log(gpuprosinfos);
+    return gpuprosinfos.map((one_info) => {
+      one_info.key = uuidv4();
+      return one_info;
     });
-    return res;
   };
 
   return (
@@ -229,7 +248,7 @@ const GPUInfo = () => {
       <Table
         pagination={{ hideOnSinglePage: true }}
         columns={columns_proc}
-        dataSource={getProcData(gpuprosinfos)}
+        dataSource={getProcDataNew(gpuprosinfos)}
       />
     </div>
   );

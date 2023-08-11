@@ -1,6 +1,7 @@
 package cn.luckynow.monitoringserver.controller;
 
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -18,6 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 
 @RestController
@@ -106,7 +114,6 @@ public class ClientController {
 
 
     public void processGpuInfo(JSONObject jsonObject, String fieldName) {
-        System.out.println(jsonObject.get("ip"));
         String ip = jsonObject.get("ip", String.class);
         Timestamp date = new Timestamp(jsonObject.get("date", Long.class) * 1000);
         JSONArray allGPUInfo = jsonObject.get(fieldName, JSONArray.class);
@@ -133,9 +140,25 @@ public class ClientController {
         JSONArray allGPUProcInfo = jsonObject.get(fieldName, JSONArray.class);
         for (int i = 0; i < allGPUProcInfo.size(); i++) {
             JSONObject oneGPUProcInfo = allGPUProcInfo.getJSONObject(i);
+            if (oneGPUProcInfo.get("startTime") != null) {
+                // 将上海时区的时间格式'Fri Jul 21 18:22:29 2023'，转成Timestamp
+                String dateString = oneGPUProcInfo.getStr("startTime");
+                if(dateString.charAt(8) == ' ') {
+                    dateString = dateString.substring(0, 8) + "0" + dateString.substring(9);
+                }
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy", Locale.ENGLISH);
+                try {
+                    LocalDateTime parsedDateTime = LocalDateTime.parse(dateString, formatter);
+                    Timestamp timestamp = Timestamp.from(parsedDateTime.toInstant(java.time.ZoneOffset.ofHours(8)));
+                    oneGPUProcInfo.set("startTime", timestamp);
+                } catch (DateTimeParseException e) {
+                    e.printStackTrace();
+                }
+            }
             GpuProc gpuProc = oneGPUProcInfo.toBean(GpuProc.class);
             gpuProc.setIp(ip);
             gpuProc.setDateGpuProc(date);
+
             iGpuProcService.save(gpuProc);
             //log.info("插入一条 GPU 进程数据：{}", gpuProc.toString());
         }

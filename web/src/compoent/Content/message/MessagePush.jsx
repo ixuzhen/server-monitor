@@ -150,7 +150,7 @@ const MessagePush = () => {
   }
 
   return (
-    <div style={{ textAlign: 'left' }}>
+    <div style={{ textAlign: 'left', marginLeft: 20 }}>
       <Divider />
       {/*设置推送使用的用户名*/}
       <h2>默认推送方式</h2>

@@ -61,6 +61,27 @@ public class ServerConroller {
         return Result.successWithData(list);
     }
 
+    @GetMapping("/gpuhosts")
+    public Result sendGpuHostsInfo(){
+        List<Host> list = iHostsService.list();
+        log.info("发送了主机列表信息");
+        // 判断机器是否在线
+        for (Host host : list) {
+            String ip = host.getIp();
+            String key = RedisConstants.HEART_BEAT_KEY + ip;
+            if (BooleanUtil.isTrue(stringRedisTemplate.hasKey(key))){
+                host.setIsOnline(true);
+            }else {
+                host.setIsOnline(false);
+            }
+            int gpuCount = iGpuInfoService.getGPUCount(ip);
+            host.setGpuCount(gpuCount);
+        }
+        return Result.successWithData(list);
+    }
+
+
+
     /**
      * 发送最新 GPU 信息
      * @param ip

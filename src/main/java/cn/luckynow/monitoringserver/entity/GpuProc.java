@@ -59,5 +59,7 @@ public class GpuProc implements Serializable {
     @ApiModelProperty("更新时间")
     private Timestamp dateGpuProc;
 
+    private Timestamp startTime;
+
 
 }

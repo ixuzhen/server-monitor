@@ -1,8 +1,8 @@
 import HostInfo from '../compoent/Content/HostInfo';
-import GPUHost from '../compoent/Content/GPUHost';
+import GPUHost from '../compoent/Content/GPU/GPUHost';
 import { Navigate } from 'react-router-dom';
 import React from 'react';
-import GPUInfo from '../compoent/Content/GPUInfo';
+import GPUInfo from '../compoent/Content/GPU/GPUInfo';
 import CommonInfo from '../compoent/Content/CommonInfo';
 import Login from '../compoent/Login/Login';
 import Home from '../compoent/Home/Home';
@@ -13,6 +13,9 @@ import { history } from '../helper/history';
 import MessagePush from '../compoent/Content/message/MessagePush';
 import Terminal from '../compoent/Content/terminal/terminal';
 import WarningPush from '../compoent/Content/WarningPush/WarningPush';
+import GpuHostIp from '../compoent/Content/GPU/GPUHostIp';
+import GpuUsedPage from '../compoent/Content/GPU/GPUUsedPage';
+import GpuUnUsedPage from '../compoent/Content/GPU/GPUUnUsedPage';
 
 const withLoadingComponent = (comp) => (
   <React.Suspense fallback={<div>Loading...</div>}>{comp}</React.Suspense>
@@ -42,11 +45,35 @@ export default [
           </PrivateRoute>
         ),
       },
+      // {
+      //   path: '/gpuhost',
+      //   element: withLoadingComponent(
+      //     <PrivateRoute>
+      //       <GpuHostIp />
+      //     </PrivateRoute>
+      //   ),
+      // },
       {
-        path: '/gpuhost',
+        path: '/gpuhostip',
         element: withLoadingComponent(
           <PrivateRoute>
-            <GPUHost />
+            <GpuHostIp />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/gpuused',
+        element: withLoadingComponent(
+          <PrivateRoute>
+            <GpuUsedPage />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/gpuunused',
+        element: withLoadingComponent(
+          <PrivateRoute>
+            <GpuUnUsedPage></GpuUnUsedPage>
           </PrivateRoute>
         ),
       },

@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGpuInfoService extends IService<GpuInfo> {
 
+    int getGPUCount(String ip);
+    public GpuInfo getRandomGPUInfoByIp(String ip) ;
+
 }
