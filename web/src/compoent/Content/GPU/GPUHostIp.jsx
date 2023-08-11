@@ -26,9 +26,29 @@ const columns = [
     render: (text) => <Link to={`/gpuinfo/${text}`}>{text}</Link>,
   },
   {
+    title: '显卡数量',
+    dataIndex: 'gpuCount',
+    key: 'gpuCount',
+  },
+  {
+    title: '状态',
+    key: 'isOnline',
+    dataIndex: 'isOnline',
+    render: (_, { isOnline }) => (
+      <>
+        <Tag color={isOnline ? 'green' : 'volcano'} key={isOnline.toString()}>
+          {isOnline ? '在线' : '掉线'}
+        </Tag>
+      </>
+    ),
+  },
+  {
     title: '更新日期',
-    dataIndex: 'date',
-    key: 'date',
+    dataIndex: 'dateHost',
+    key: 'dateHost',
+    render: (text) => (
+      <span>{paringDate(text.toString(), 'YYYY-MM-DD HH:mm')}</span>
+    ),
   },
 ];
 
@@ -40,7 +60,7 @@ function GpuHostIp(props) {
   const loadHosts = async () => {
     const res = await API({
       method: 'GET',
-      url: '/server/hosts',
+      url: '/server/gpuhosts',
     }).then((response) => {
       const { code, message, data } = response.data;
       if (isSuccess(code)) {
@@ -62,15 +82,16 @@ function GpuHostIp(props) {
     if (hosts !== undefined) {
       const res = hosts.map((h) => {
         h.key = h.idHost;
-        h.date = paringDate(h.dateHost.toString(), 'YYYY-MM-DD HH:mm');
+        // h.date = paringDate(h.dateHost.toString(), 'YYYY-MM-DD HH:mm');
         return h;
       });
+      console.log(res);
       return res;
     }
     return null;
   };
   const onChange = (key) => {
-    console.log(key);
+    // console.log(key);
   };
 
   return (

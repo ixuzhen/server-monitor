@@ -29,9 +29,15 @@ public class Host implements Serializable {
     private String ip;
 
     private Timestamp dateHost;
-    // 当前机器是否在线
+
+    /**
+     * 当前机器是否在线
+     */
     @TableField(exist = false)
     private Boolean isOnline = false;
+
+    @TableField(exist = false)
+    private int gpuCount = 0;
 
 
 }
