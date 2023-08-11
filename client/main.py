@@ -9,6 +9,7 @@ import json
 from entity.GPUProcInfo import GPUProcInfo
 from util.disk_util import get_all_disk_usage, disk_io_counters
 from apscheduler.schedulers.blocking import BlockingScheduler
+from util.docker_util import get_docker_info
 from datetime import datetime
 import time
 import yaml
@@ -118,27 +119,50 @@ def get_disk_io_counters():
         res.append(dict(counter._asdict()))
     return res
 
+def get_docker_info_dict():
+    docker_info = get_docker_info()
+    res = []
+    for info in docker_info:
+        res.append(info.__dict__)
+    return res
+
 def send_all_message():
     # 通用信息
     
     date = int(time.time())
     message = Message(ip, date)
-    # GPU 信息
-    message.gpu_info = get_gpu_common_info()
-    # GPU 进程信息
-    message.gpu_proc_info = get_gpu_proc_info()
-    # 硬盘用量
-    disk_usages = get_disk_usage()
-    message.disk_usages = disk_usages
-    # 硬盘读写平均速度
-    disk_counters = get_disk_io_counters()
-    message.disk_counters = disk_counters
-    # 内存信息
-    memory = get_memory()
-    message.memory = dict(memory._asdict())
-    # 开放的端口信息
-    ports = get_TCP_UDP_with_pid_dict()
-    message.ports = ports
+    try:
+        # GPU 信息
+        message.gpu_info = get_gpu_common_info()
+    except BaseException as err:
+        print(f'error: {err}')
+    try:
+        # GPU 进程信息
+        message.gpu_proc_info = get_gpu_proc_info()
+    except BaseException as err:
+        print(f'error: {err}')
+    try:
+        # 硬盘用量
+        disk_usages = get_disk_usage()
+        message.disk_usages = disk_usages
+        # 硬盘读写平均速度
+        disk_counters = get_disk_io_counters()
+        message.disk_counters = disk_counters
+        # 内存信息
+        memory = get_memory()
+        message.memory = dict(memory._asdict())
+        # 开放的端口信息
+        ports = get_TCP_UDP_with_pid_dict()
+        message.ports = ports
+    except BaseException as err:
+        print(f'error: {err}')
+
+    try:
+        # docker 信息
+        docker_info = get_docker_info_dict()
+        message.docker_info = docker_info
+    except BaseException as err:
+        print(f'error: {err}')
     js = json.dumps(message.__dict__,cls=MyEncoder)
     # print(js)
     headers = {'Content-Type': 'application/json', 'Connection': 'close'}
@@ -180,5 +204,6 @@ def start():
 
 if __name__ == '__main__':
     print("start")
-    start()
-    # send_all_message()
+    # start()
+    send_all_message()
+    # get_docker_info_dict()

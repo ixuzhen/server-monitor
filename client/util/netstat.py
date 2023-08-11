@@ -120,6 +120,8 @@ def get_TCP_UDP_with_pid():
                             map[inode] = map[inode]._replace(pid=pid,pname=pname[1:-1])
         except PermissionError:
             pass
+        except FileNotFoundError:
+            pass
 
 
     return map.values()
