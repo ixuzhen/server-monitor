@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, Space, Table, Tag, Collapse } from 'antd';
 import axios from 'axios';
-import { isSuccess } from '../../helper/utils';
+import { isSuccess, paringDate } from '../../../helper/utils';
 import {
   Link,
   Navigate,
@@ -11,7 +11,7 @@ import {
   useRoutes,
 } from 'react-router-dom';
 import GPUUsed from './GPUUsed';
-import { API } from '../../request';
+import { API } from '../../../request';
 
 const { Panel } = Collapse;
 
@@ -58,10 +58,11 @@ function GPUHost(props) {
   }, []);
 
   const getData = (hosts) => {
+    console.log(hosts);
     if (hosts !== undefined) {
       const res = hosts.map((h) => {
         h.key = h.idHost;
-        h.date = '2022-12-04 22:53';
+        h.date = paringDate(h.dateHost.toString(), 'YYYY-MM-DD HH:mm');
         return h;
       });
       return res;
@@ -98,3 +99,4 @@ function GPUHost(props) {
 }
 
 export default GPUHost;
+// 已废弃

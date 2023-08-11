@@ -26,31 +26,44 @@ const items = [
     <PieChartOutlined />
   ),
   // getItem('主机列表', '/content', <PieChartOutlined />),
-  getItem(<Link to='/gpuhost'>显卡信息</Link>, '/gpuhost', <DesktopOutlined />),
+  // getItem(<Link to='/gpuhost'>显卡信息</Link>, '/gpuhost', <DesktopOutlined />),
+  // getItem(
+  //   <Link to='/gpuhostip'>显卡信息</Link>,
+  //   '/gpuhost',
+  //   <DesktopOutlined />
+  // ),
+
+  getItem('显卡信息', 'gpu', <DesktopOutlined />, [
+    getItem(
+      <Link to='/gpuhostip'>主机 IP</Link>,
+      '/gpuhost',
+      <DesktopOutlined />
+    ),
+    getItem(
+      <Link to='/gpuused'>空闲显卡</Link>,
+      '/gpuused',
+      <DesktopOutlined />
+    ),
+    getItem(
+      <Link to='/gpuunused'>已使用显卡</Link>,
+      '/gpuunused',
+      <DesktopOutlined />
+    ),
+  ]),
 
   getItem(
     <Link to='/message'>消息推送</Link>,
     '/message',
     <ContainerOutlined />
   ),
-  getItem(
-    <Link to='/terminal'>远程终端</Link>,
-    '/terminal',
-    <ContainerOutlined />
-  ),
+  // getItem(
+  //   <Link to='/terminal'>远程终端</Link>,
+  //   '/terminal',
+  //   <ContainerOutlined />
+  // ),
   getItem('管理', 'sub1', <MailOutlined />, [
     getItem(<Link to='/warningPush'>警告推送</Link>, 'warning push'),
-    getItem('人员管理', '6'),
-    getItem('Option 7', '7'),
-    getItem('Option 8', '8'),
-  ]),
-  getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
-    getItem('Option 9', '9'),
-    getItem('Option 10', '10'),
-    getItem('Submenu', 'sub3', null, [
-      getItem('Option 11', '11'),
-      getItem('Option 12', '12'),
-    ]),
+    // getItem('人员管理', '6'),
   ]),
 ];
 const MyMenu = () => {
@@ -60,7 +73,7 @@ const MyMenu = () => {
   return (
     <Menu
       defaultSelectedKeys={['1']}
-      defaultOpenKeys={['sub1']}
+      defaultOpenKeys={['gpu']}
       mode='inline'
       theme='light'
       // inlineCollapsed={collapsed}

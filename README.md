@@ -163,6 +163,7 @@ send_hearbeat_interval: 60
 ```
 3. 安装依赖并运行
 ```
+# python 大于3.6
 pip install pynvml;
 pip install apscheduler;
 pip install requests;
