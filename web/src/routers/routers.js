@@ -16,6 +16,9 @@ import WarningPush from '../compoent/Content/WarningPush/WarningPush';
 import GpuHostIp from '../compoent/Content/GPU/GPUHostIp';
 import GpuUsedPage from '../compoent/Content/GPU/GPUUsedPage';
 import GpuUnUsedPage from '../compoent/Content/GPU/GPUUnUsedPage';
+import LoginForm from '../compoent/Login/LoginForm';
+import DockerHost from '../compoent/Content/Docker/DockerHost';
+import DockerInfo from '../compoent/Content/Docker/DockerInfo';
 
 const withLoadingComponent = (comp) => (
   <React.Suspense fallback={<div>Loading...</div>}>{comp}</React.Suspense>
@@ -117,16 +120,39 @@ export default [
           </PrivateRoute>
         ),
       },
+      {
+        path: '/dockerhost',
+        element: withLoadingComponent(
+          <PrivateRoute>
+            <DockerHost />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/dockerinfo/:ip',
+        element: withLoadingComponent(
+          <PrivateRoute>
+            <DockerInfo />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   {
-    path: '/login',
-    element: <Login />,
+    path: '/',
+    element: <Login></Login>,
+    children: [
+      {
+        path: '/login',
+        element: <LoginForm />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
+      },
+    ],
   },
-  {
-    path: '/register',
-    element: <Register />,
-  },
+
   {
     path: '*',
     element: <Navigate to='/hostinfo' />,

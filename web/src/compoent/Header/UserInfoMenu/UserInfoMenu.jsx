@@ -5,11 +5,11 @@ import { Button, Dropdown, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const items = [
-  {
-    label: '用户信息',
-    key: '1',
-    icon: <UserOutlined />,
-  },
+  // {
+  //   label: '用户信息',
+  //   key: '1',
+  //   icon: <UserOutlined />,
+  // },
   {
     label: '退出登录',
     key: '2',

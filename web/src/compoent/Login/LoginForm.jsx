@@ -27,56 +27,67 @@ const LoginForm = () => {
   };
 
   return (
-    <Form
-      name='normal_login'
-      className='login-form'
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={onFinish}
-    >
-      <Form.Item
-        name='username'
-        rules={[
-          {
-            required: true,
-            message: 'Please input your Username!',
-          },
-        ]}
+    <div>
+      <Form
+        name='normal_login'
+        className='login-form'
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={onFinish}
       >
-        <Input
-          prefix={<UserOutlined className='site-form-item-icon' />}
-          placeholder='Username'
-        />
-      </Form.Item>
-      <Form.Item
-        name='password'
-        rules={[
-          {
-            required: true,
-            message: 'Please input your Password!',
-          },
-        ]}
-      >
-        <Input
-          prefix={<LockOutlined className='site-form-item-icon' />}
-          type='password'
-          placeholder='Password'
-        />
-      </Form.Item>
-      <Form.Item>
-        <a className='login-form-forgot' href=''>
-          Forgot password
-        </a>
-      </Form.Item>
+        <h3>账号登录</h3>
+        <Form.Item
+          name='username'
+          rules={[
+            {
+              required: true,
+              message: 'Please input your Username!',
+            },
+          ]}
+        >
+          <Input
+            prefix={<UserOutlined className='site-form-item-icon' />}
+            placeholder='请输入账号'
+          />
+        </Form.Item>
+        <Form.Item
+          name='password'
+          rules={[
+            {
+              required: true,
+              message: 'Please input your Password!',
+            },
+          ]}
+        >
+          <Input
+            prefix={<LockOutlined className='site-form-item-icon' />}
+            type='password'
+            placeholder='请输入密码'
+          />
+        </Form.Item>
+        <Form.Item>
+          {/*<a className='login-form-forgot' href=''>*/}
+          {/*  忘记密码*/}
+          {/*</a>*/}
+          <div style={{ textAlign: 'right' }}>
+            <Link to='/register'>注册登录</Link>
+          </div>
+        </Form.Item>
 
-      <Form.Item>
-        <Button type='primary' htmlType='submit' className='login-form-button'>
-          Log in
-        </Button>
-        Or <Link to='/register'>register now!</Link>
-      </Form.Item>
-    </Form>
+        <Form.Item>
+          <div style={{ textAlign: 'center' }}>
+            <Button
+              type='primary'
+              htmlType='submit'
+              className='login-form-button'
+            >
+              登录
+            </Button>
+          </div>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 export default LoginForm;

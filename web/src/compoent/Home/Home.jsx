@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, useRoutes } from 'react-router-dom';
+import { Link, Outlet, useRoutes } from 'react-router-dom';
 import routers from '../../routers/routers';
 import { Breadcrumb, Layout } from 'antd';
 import Sider from '../Sider/Sider';
@@ -22,20 +22,22 @@ const Home = () => {
       >
         <Header />
 
-        <Breadcrumb
-          style={{
-            margin: '24px 16px 0',
-          }}
-        >
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <a href=''>Application Center</a>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <a href=''>Application List</a>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>An Application</Breadcrumb.Item>
-        </Breadcrumb>
+        {/*<Breadcrumb*/}
+        {/*  style={{*/}
+        {/*    margin: '24px 16px 0',*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  <Breadcrumb.Item>*/}
+        {/*    <Link to='/gpuused'>Home</Link>,*/}
+        {/*  </Breadcrumb.Item>*/}
+        {/*  <Breadcrumb.Item>*/}
+        {/*    <a href=''>Application Center</a>*/}
+        {/*  </Breadcrumb.Item>*/}
+        {/*  <Breadcrumb.Item>*/}
+        {/*    <a href=''>Application List</a>*/}
+        {/*  </Breadcrumb.Item>*/}
+        {/*  <Breadcrumb.Item>An Application</Breadcrumb.Item>*/}
+        {/*</Breadcrumb>*/}
 
         <AntdContent
           style={{
