@@ -1,0 +1,17 @@
+FROM maven:3.6.3-openjdk-8 AS builder
+# AS builder 起别名
+RUN mkdir /build
+# 创建临时文件
+COPY ./src /build/src
+#将 src目录复制到临时目录
+COPY ./pom.xml /build
+# 将 pom文件复制到临时目录,跳过测试
+RUN cd /build && mvn -B -ntp -DskipTests package
+# 打包
+#FROM java:8
+FROM adoptopenjdk/openjdk8:alpine-jre
+# 获取jre
+COPY --from=builder /build/target/monitoring-server-0.0.1-SNAPSHOT.jar /monitoring-server.jar
+#COPY /build/target/monitoring-server-0.0.1-SNAPSHOT.jar /monitoring-server.jar
+#从标记点 拷贝jar包 并改名
+#CMD ["java", "-jar", "/monitoring-server.jar"]

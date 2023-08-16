@@ -34,6 +34,9 @@ public class MemoryServiceImpl extends ServiceImpl<MemoryMapper, Memory> impleme
     @Override
     public Timestamp getNewestDateMemoryByIp(String ip) {
         Memory newestMemory = this.getNewestMemoryByIp(ip);
+        if (newestMemory == null) {
+            return null;
+        }
         return newestMemory.getDate();
     }
 

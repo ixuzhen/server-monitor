@@ -34,6 +34,9 @@ public class GpuProcServiceImpl extends ServiceImpl<GpuProcMapper, GpuProc> impl
     @Override
     public Timestamp getNewestDateGpuProcByIp(String ip) {
         GpuProc newestGpuProc = this.getNewestOneGpuProcByIp(ip);
+        if (newestGpuProc == null) {
+            return null;
+        }
         return newestGpuProc.getDateGpuProc();
     }
 

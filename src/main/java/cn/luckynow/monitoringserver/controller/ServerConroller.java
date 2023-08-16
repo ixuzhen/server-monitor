@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -120,6 +121,18 @@ public class ServerConroller {
         List<GpuInfo> gpuList = iGpuInfoService.getNewestGpuInfoListByIp(ip);
         log.info("发送了 GPU 信息.");
         return Result.successWithData(gpuList);
+    }
+
+    @GetMapping("/ping/{ip}")
+    public Result<Boolean> ping(@PathVariable String ip){
+        boolean reachable = false;
+        try {
+            InetAddress inetAddress = InetAddress.getByName(ip);
+            reachable = inetAddress.isReachable(3000); // 设置超时时间为3秒
+        } catch (Exception e) {
+            log.error("发生异常：" + e.getMessage());
+        }
+        return Result.successWithData(reachable);
     }
 
     /**

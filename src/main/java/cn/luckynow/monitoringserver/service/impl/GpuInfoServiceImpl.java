@@ -25,7 +25,12 @@ public class GpuInfoServiceImpl extends ServiceImpl<GpuInfoMapper, GpuInfo> impl
 
     @Override
     public int getGPUCount(String ip) {
-        return this.getRandomGPUInfoByIp(ip).getCountGpu();
+
+        GpuInfo randomGPUInfoByIp = this.getRandomGPUInfoByIp(ip);
+        if (randomGPUInfoByIp == null) {
+            return 0;
+        }
+        return randomGPUInfoByIp.getCountGpu();
     }
 
     @Override
@@ -49,6 +54,9 @@ public class GpuInfoServiceImpl extends ServiceImpl<GpuInfoMapper, GpuInfo> impl
     @Override
     public Timestamp getNewestDateGpuByIp(String ip) {
         GpuInfo newestGpuInfo = this.getNewestOneGpuInfoByIp(ip);
+        if (newestGpuInfo == null) {
+            return null;
+        }
         return newestGpuInfo.getDateGpu();
     }
 

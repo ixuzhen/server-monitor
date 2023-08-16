@@ -43,6 +43,9 @@ public class DiskUsageServiceImpl extends ServiceImpl<DiskUsageMapper, DiskUsage
     @Override
     public Timestamp getNewestDateDiskByIp(String ip) {
         DiskUsage newestDiskUsage = this.getNewestOneDiskUsageByIp(ip);
+        if (newestDiskUsage == null) {
+            return null;
+        }
         return newestDiskUsage.getDateDisk();
     }
 

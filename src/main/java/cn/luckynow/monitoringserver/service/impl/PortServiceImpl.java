@@ -34,6 +34,9 @@ public class PortServiceImpl extends ServiceImpl<PortMapper, Port> implements IP
     @Override
     public Timestamp getNewestDatePortByIp(String ip) {
         Port newestPort = this.getNewestOnePortByIp(ip);
+        if (newestPort == null) {
+            return null;
+        }
         return newestPort.getDate();
     }
 

@@ -1,0 +1,11 @@
+FROM openjdk:8
+
+#ADD monitoring-server-0.0.1-SNAPSHOT.jar monitoring-server.jar
+COPY ./target/monitoring-server-0.0.1-SNAPSHOT.jar /monitoring-server.jar
+# 运行jar包
+#RUN #bash -c 'touch /zzyy_docker.jar'
+#暴露6001端口作为微服务
+EXPOSE 8080
+
+ENTRYPOINT ["java","-jar","/monitoring-server.jar"]
+
