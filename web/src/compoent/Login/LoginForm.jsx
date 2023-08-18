@@ -48,7 +48,7 @@ const LoginForm = () => {
         >
           <Input
             prefix={<UserOutlined className='site-form-item-icon' />}
-            placeholder='请输入账号'
+            placeholder='请输入账号(admin)'
           />
         </Form.Item>
         <Form.Item
@@ -63,7 +63,7 @@ const LoginForm = () => {
           <Input
             prefix={<LockOutlined className='site-form-item-icon' />}
             type='password'
-            placeholder='请输入密码'
+            placeholder='请输入密码(123456)'
           />
         </Form.Item>
         <Form.Item>

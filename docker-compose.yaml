@@ -5,7 +5,7 @@ services:
 #    image: my-springboot-app:latest
     build:
       context: ./
-      dockerfile: Dockerfile_SpringBoot_jar
+      dockerfile: Dockerfile_SpringBoot_maven
     container_name: monitor_springboot
     ports:
       - "8080:8080"
@@ -25,12 +25,13 @@ services:
       - --spring.datasource.password=123456
       - --spring.redis.host=monitor_redis
       - --spring.redis.password=redispw
-      # 外部访问地址，请根据实际需要修改
-#      - --halo.external-url=http://localhost:8080/
+      # 发送邮箱配置
+      - --spring.mail.host=smtp.163.com
       # 发生消息的邮箱，验证码的邮箱
-      - --spring.mail.username=xuzhe
+      - --spring.mail.username=xuzh78@163.com
       # 发生消息的邮箱，验证码的密码
-      - --spring.mail.password=D
+      - --spring.mail.password=DJLLUBSOPPKL
+      - --spring.mail.port=25
 
 
   monitor_mysql:

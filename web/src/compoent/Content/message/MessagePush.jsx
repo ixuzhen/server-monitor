@@ -224,10 +224,10 @@ const MessagePush = () => {
           推送地址：
           <Input
             style={{
-              width: '40%',
+              width: '50%',
             }}
             value={
-              'https://luckynow.cn:8080/push/' +
+              'https://monitoring.luckynow.cn/api/push/' +
               username +
               '?title=标题&content=内容'
             }

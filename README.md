@@ -70,90 +70,47 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 ## 部署
 ### 基于 Docker 进行部署接收端
 1. clone 该项目
-```aidl
+```shell
 git clone https://github.com/ixuzhen/server-monitor.git
+cd server-monitor/
 ```
-2. 根据自己需要修改配置文件 docker-compose.yaml 文件，不修改使用默认配置也可以跑起来（如果修改了 MySQL 或者 Redis 的信息，同时也需要修改 SpringBoot 的配置文件相应的配置）。
+2. 修改 Dockerfile_React 中的服务器地址
+```shell
+vim ./Dockfile_React
 ```
-version: "3"
 
-services:
-  monitor_springboot:
-#    image: monitor:0.0.1
-    build:
-      context: ./
-      dockerfile: Dockerfile_SpringBoot
-    container_name: monitor
-    ports:
-      - "8080:8080"
-    networks:
-      - monitor_net
-    depends_on:
-#      - redis
-      - mysql_monitor
-    command:
-      - --spring.datasource.url=jdbc:mysql://mysql_monitor:3306/monitoring?serverTimezone=GMT%2B8&characterEncoding=utf-8&useSSL=false
-      ## MySQL 用户名
-      - --spring.datasource.username=root
-      # MySQL 的密码，请保证与下方 MYSQL_ROOT_PASSWORD 的变量值一致。
-      - --spring.datasource.password=123456
-      
-      # 发生消息的邮箱，验证码的邮箱
-      - --spring.mail.username=xuzhe
-      # 发生消息的邮箱，验证码的密码
-      - --spring.mail.password=DfFjk
-
-
-  mysql_monitor:
-    image: mysql:8.0.31
-    container_name: mysql_monitor
-    ports:
-      - "3307:3306"
-    volumes:
-      # 数据挂载
-      - /root/mysql/data/:/var/lib/mysql/
-      # 配置挂载
-      - /root/mysql/conf/:/etc/mysql/conf.d/
-      # 初始化目录挂载
-      - /root/mysql/init/:/docker-entrypoint-initdb.d/
-
-    networks:
-      - monitor_net
-    environment:
-      # 请修改此密码，并对应修改上方 monitor_springboot 服务的 spring.datasource.password 变量值
-      - MYSQL_ROOT_PASSWORD=123456
-      - MYSQL_DATABASE=monitoring
-
-
-  monitor_react:
-    #    image: monitor:0.0.1
-    build:
-      context: ./
-      dockerfile: Dockerfile_React
-    container_name: react_monitor
-    ports:
-      - "80:80"
-    networks:
-      - monitor_net
-    depends_on:
-      - monitor_springboot
-
-networks:
-  monitor_net:
+```dockerfile
+FROM node:18.12.1 AS build
+#......
+# 改成自己服务器地址
+ENV REACT_APP_SERVER=https://luckynow.cn:8080
+#......
+CMD ["nginx", "-g", "daemon off;"]
 ```
 3. 运行命令
-```
+```shell
+# Docker Compose版本1.27.0及更高版本中使用下面这个命令
+docker compose up -d
+# Docker Compose版本1.27.0以下使用下面这个命令
 docker-compose up -d
 ```
 
 4. 停止容器
-```aidl
-docker-compose down
+```shell
+docker-compose stop
+```
+
+5. 其他
+如果在执行 `docker compose up -d` 时很慢，卡在` => [builder 5/5] RUN cd /build && mvn -B -ntp -DskipTests package`
+这里，可以把打好的 jar 包放在 `./target/` 文件夹下，并将 jar 包改名为 `monitoring-server.jar`。
+```shell
+# 改名
+mv ./target/monitoring-server-0.0.1-SNAPSHOT.jar ./target/monitoring-server.jar
 ```
 
 ### 部署发送端
 1. clone 该项目
-```aidl
+```shell
 git clone https://github.com/ixuzhen/server-monitor.git
 cd ./server-monitor/client
 ```

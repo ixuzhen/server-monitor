@@ -73,6 +73,8 @@ function DockerHost(props) {
   const getData = (datas) => {
     // console.log(datas);
     if (datas !== undefined) {
+      // 过滤掉dockerCount为0的数据
+      datas = datas.filter((h) => h['dockerCount'] !== 0);
       return datas.map((h) => {
         h.key = h['idHost'];
         // paringDate(data['dateGpu'].toString(), 'YYYY-MM-DD HH:mm')
