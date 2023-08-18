@@ -50,6 +50,11 @@ const items = [
       <DesktopOutlined />
     ),
   ]),
+  getItem(
+    <Link to='/dockerhost'>Docker 信息</Link>,
+    '/dockerhost',
+    <ContainerOutlined />
+  ),
 
   getItem(
     <Link to='/message'>消息推送</Link>,

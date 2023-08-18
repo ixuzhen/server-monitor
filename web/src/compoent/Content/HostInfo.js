@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, Space, Table, Tag } from 'antd';
-import { isSuccess, paringDate } from '../../helper/utils';
+import {
+  isSuccess,
+  paringDate,
+  showError,
+  showSuccess,
+} from '../../helper/utils';
 import { Link } from 'react-router-dom';
 import { API } from '../../request';
 
@@ -47,11 +52,24 @@ const columns = [
     key: 'action',
     render: (_, record) => (
       <Space size='middle'>
-        <a>Ping</a>
+        <a onClick={() => ping(record)}>Ping</a>
       </Space>
     ),
   },
 ];
+const ping = async (record) => {
+  const ip = record.ip;
+  const res = await API.get('/server/ping/' + ip);
+  console.log(res);
+  const { code, message, data } = res.data;
+  if (isSuccess(code)) {
+    if (data === true) showSuccess(ip + '可达');
+    else showError(ip + '不可达');
+    // console.log(datas);
+  } else {
+    showError(ip + '不可达');
+  }
+};
 
 function HostInfo(props) {
   const [hosts, setHosts] = useState(undefined);
@@ -97,7 +115,12 @@ function HostInfo(props) {
     return null;
   };
 
-  return <Table columns={columns} dataSource={getData(hosts)} />;
+  return (
+    <div>
+      {/*<h2>主机信息</h2>*/}
+      <Table columns={columns} dataSource={getData(hosts)} />
+    </div>
+  );
 }
 
 export default HostInfo;

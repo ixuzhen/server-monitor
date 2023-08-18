@@ -12,10 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -31,6 +28,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/client")
 @Slf4j
+@CrossOrigin
 public class ClientController {
 
     @Autowired
@@ -53,6 +51,9 @@ public class ClientController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private IDockerInfoService iDockerInfoService;
+
 
     @PostMapping("/data")
     public Result<Object> receiveAllData(@RequestBody String allData) {
@@ -72,9 +73,13 @@ public class ClientController {
             this.processMemoryInfo(allDataJson, "memory", ip, date);
         if (dataKeySet.contains("ports"))
             this.processPortInfo(allDataJson, "ports", ip, date);
+        if (dataKeySet.contains("docker_info"))
+            this.processDockerInfo(allDataJson, "docker_info", ip, date);
 
         return Result.successWithMessage("成功获取到全部数据");
     }
+
+
 
     /**
      * 获取心跳数据，存入Redis中
@@ -202,6 +207,18 @@ public class ClientController {
             //iDiskUsageService.save(diskUsage);
             iPortService.save(portInfo);
             //log.info("插入一条端口信息：{}", portInfo);
+        }
+    }
+
+    private void processDockerInfo(JSONObject allDataJson, String docker_info, String ip, Timestamp date) {
+        JSONArray dockerInfos = allDataJson.get(docker_info, JSONArray.class);
+        for (int i = 0; i < dockerInfos.size(); i++){
+            JSONObject oneUsageInfoJson = dockerInfos.getJSONObject(i);
+            DockerInfo docker = oneUsageInfoJson.toBean(DockerInfo.class);
+            docker.setIp(ip);
+            docker.setDate(date);
+            iDockerInfoService.save(docker);
+            //log.info("插入一条docker信息：{}", docker);
         }
     }
 

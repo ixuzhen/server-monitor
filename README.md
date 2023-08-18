@@ -146,6 +146,11 @@ networks:
 docker-compose up -d
 ```
 
+4. 停止容器
+```aidl
+docker-compose down
+```
+
 ### 部署发送端
 1. clone 该项目
 ```aidl

@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/management")
 @Slf4j
+@CrossOrigin
 public class ManagementController {
 
     @Autowired

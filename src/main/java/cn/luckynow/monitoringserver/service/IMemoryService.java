@@ -5,6 +5,9 @@ import cn.luckynow.monitoringserver.entity.Memory;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -15,5 +18,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IMemoryService extends IService<Memory> {
 
+
+
+    Memory getNewestMemoryByIp(String ip);
+    Timestamp getNewestDateMemoryByIp(String ip);
 
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +41,9 @@ public class ServerConroller {
 
     @Autowired
     private IPortService iPortService;
+
+    @Autowired
+    private IDockerInfoService iDockerInfoService;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -80,6 +84,26 @@ public class ServerConroller {
         return Result.successWithData(list);
     }
 
+    @GetMapping("/dockerhosts")
+    public Result sendDockerHostsInfo(){
+        List<Host> list = iHostsService.list();
+        log.info("发送了主机列表信息");
+        // 判断机器是否在线
+        for (Host host : list) {
+            String ip = host.getIp();
+            String key = RedisConstants.HEART_BEAT_KEY + ip;
+            if (BooleanUtil.isTrue(stringRedisTemplate.hasKey(key))){
+                host.setIsOnline(true);
+            }else {
+                host.setIsOnline(false);
+            }
+
+            int dockerCount = iDockerInfoService.getDockerCount(ip);
+            host.setDockerCount(dockerCount);
+        }
+        return Result.successWithData(list);
+    }
+
 
 
     /**
@@ -89,13 +113,26 @@ public class ServerConroller {
      */
     @GetMapping("/gpu")
     public Result sendGpuInfo(@RequestParam String ip){
-        log.info(ip);
-        QueryWrapper<GpuInfo> gpuInfoQueryWrapper = new QueryWrapper<>();
-        gpuInfoQueryWrapper.eq("ip", ip)
-                .apply("date_gpu = (select Max(date_gpu) from gpu_info where ip = '" + ip + "')");
-        List<GpuInfo> gpuList = iGpuInfoService.list(gpuInfoQueryWrapper);
-        log.info("发送了 GPU 信息");
+        //log.info(ip);
+        //QueryWrapper<GpuInfo> gpuInfoQueryWrapper = new QueryWrapper<>();
+        //gpuInfoQueryWrapper.eq("ip", ip)
+        //        .apply("date_gpu = (select Max(date_gpu) from gpu_info where ip = '" + ip + "')");
+        //List<GpuInfo> gpuList = iGpuInfoService.list(gpuInfoQueryWrapper);
+        List<GpuInfo> gpuList = iGpuInfoService.getNewestGpuInfoListByIp(ip);
+        log.info("发送了 GPU 信息.");
         return Result.successWithData(gpuList);
+    }
+
+    @GetMapping("/ping/{ip}")
+    public Result<Boolean> ping(@PathVariable String ip){
+        boolean reachable = false;
+        try {
+            InetAddress inetAddress = InetAddress.getByName(ip);
+            reachable = inetAddress.isReachable(3000); // 设置超时时间为3秒
+        } catch (Exception e) {
+            log.error("发生异常：" + e.getMessage());
+        }
+        return Result.successWithData(reachable);
     }
 
     /**
@@ -106,22 +143,36 @@ public class ServerConroller {
     @GetMapping("/gpu/proc")
     public Result sendGpuProcInfo(@RequestParam String ip){
 
-        QueryWrapper<GpuProc> gpuInfoQueryWrapper = new QueryWrapper<>();
-        gpuInfoQueryWrapper.eq("ip", ip)
-                .apply("date_gpu_proc = (select Max(date_gpu_proc) from gpu_proc where ip = '" + ip + "')");
-        List<GpuProc> gpuList = iGpuProcService.list(gpuInfoQueryWrapper);
-        log.info("发送了 GPU 进程信息");
+        List<GpuProc> gpuList = iGpuProcService.getNewestGpuProcListByIp(ip);
+        log.info("发送了 GPU 进程信息。");
         return Result.successWithData(gpuList);
     }
 
+
+    /**
+     *
+     *
+     这么写不能使用（IP，date_disk）的索引
+     EXPLAIN
+     SELECT MAX(date_disk) FROM disk_usage WHERE ip = '125.216.243.209'
+     要下面这么写
+     EXPLAIN
+     SELECT * FROM disk_usage
+     WHERE ip = '125.216.243.209'
+     ORDER BY date_disk DESC
+     LIMIT 1;
+     * @param ip
+     * @return
+     */
     @GetMapping("/disk/usage")
     public Result sendDiskUsageInfo(@RequestParam String ip){
-        QueryWrapper<DiskUsage> QueryWrapper = new QueryWrapper<>();
-        QueryWrapper.eq("ip", ip)
-                .apply("date_disk = (select Max(date_disk) from disk_usage where ip = '" + ip + "')");
-        List<DiskUsage> diskUsageList = iDiskUsageService.list(QueryWrapper);
+        //QueryWrapper<DiskUsage> QueryWrapper = new QueryWrapper<>();
+        //QueryWrapper.eq("ip", ip)
+        //        .apply("date_disk = (select Max(date_disk) from disk_usage where ip = '" + ip + "')");
+        //List<DiskUsage> diskUsageList = iDiskUsageService.list(QueryWrapper);
+        List<DiskUsage> newestDiskUsageListByIp = iDiskUsageService.getNewestDiskUsageListByIp(ip);
         log.info("发送了硬盘用量信息");
-        return Result.successWithData(diskUsageList);
+        return Result.successWithData(newestDiskUsageListByIp);
     }
 
     // 获取普通信息
@@ -129,36 +180,42 @@ public class ServerConroller {
     public Result sendCommonInfo(@RequestParam String ip){
         JSONObject result = JSONUtil.createObj();
         // 获取磁盘信息
-        QueryWrapper<DiskUsage> queryWrapperDisk = new QueryWrapper<>();
-        queryWrapperDisk.eq("ip", ip)
-                .apply("date_disk = (select Max(date_disk) from disk_usage where ip = '" + ip + "')");
-        List<DiskUsage> diskUsageList = iDiskUsageService.list(queryWrapperDisk);
+        List<DiskUsage> diskUsageList = iDiskUsageService.getNewestDiskUsageListByIp(ip);
         if(diskUsageList!=null){
             result.putOnce("diskUsageList", diskUsageList);
-            log.info("发送了硬盘用量信息");
+            log.info("发送了硬盘用量信息。");
         }
-
-
         // 获取内存信息
-        QueryWrapper<Memory> queryWrapperMemory = new QueryWrapper<>();
-        queryWrapperMemory.eq("ip", ip)
-                .apply("date = (select Max(date) from memory where ip = '" + ip + "')");
-        Memory memory = iMemoryService.getOne(queryWrapperMemory);
+        Memory memory = iMemoryService.getNewestMemoryByIp(ip);
         if(memory!=null){
             result.putOnce("memoryInfo", memory);
-            log.info("发送了内存用量信息");
+            log.info("发送了内存用量信息。");
         }
-
         // 获取端口信息
-        QueryWrapper<Port> queryWrapperPort = new QueryWrapper<>();
-        queryWrapperPort.eq("ip", ip)
-                .apply("date = (select Max(date) from port where ip = '" + ip + "')");
-        List<Port> portList = iPortService.list(queryWrapperPort);
+        List<Port> portList = iPortService.getNewestPortListByIp(ip);
         if(portList!=null){
             result.putOnce("portLists", portList);
-            log.info("发送了端口信息");
+            log.info("发送了端口信息。");
         }
+        return Result.successWithData(result);
+    }
 
+    // 获取普通信息
+    @GetMapping("/docker")
+    public Result sendDockerInfoByIp(@RequestParam String ip){
+        JSONObject result = JSONUtil.createObj();
+
+        // 获取内存信息
+        Memory memory = iMemoryService.getNewestMemoryByIp(ip);
+        if(memory!=null){
+            result.putOnce("memoryInfo", memory);
+            log.info("发送了内存用量信息。");
+        }
+        List<DockerInfo> dockerInfo = iDockerInfoService.getNewestDockerInfoListByIp(ip);
+        if(dockerInfo!=null){
+            result.putOnce("dockerInfo", dockerInfo);
+            log.info("发送了docker信息。");
+        }
         return Result.successWithData(result);
     }
 
@@ -187,17 +244,12 @@ public class ServerConroller {
         for (Host host : hosts) {
             String ip = host.getIp();
             // 得到该 IP 主机的最新显卡信息
-            QueryWrapper<GpuInfo> gpuInfoQueryWrapper = new QueryWrapper<>();
-            gpuInfoQueryWrapper.eq("ip", ip)
-                    .apply("date_gpu = (select Max(date_gpu) from gpu_info where ip = '" + ip + "')");
-            List<GpuInfo> gpuList = iGpuInfoService.list(gpuInfoQueryWrapper);
-            if (gpuList == null || gpuList.size()==0)
+            List<GpuInfo> gpuList = iGpuInfoService.getNewestGpuInfoListByIp(ip);
+            if (gpuList == null || gpuList.size()==0){
                 continue;
+            }
             // 得到该 IP 主机的最新的显卡进程信息
-            QueryWrapper<GpuProc> gpuProcInfoQueryWrapper = new QueryWrapper<>();
-            gpuProcInfoQueryWrapper.eq("ip", ip)
-                    .eq("date_gpu_proc", gpuList.get(0).getDateGpu());
-            List<GpuProc> gpuProcList = iGpuProcService.list(gpuProcInfoQueryWrapper);
+            List<GpuProc> gpuProcList = iGpuProcService.getGpuProcByIpAndDate(ip, gpuList.get(0).getDateGpu());
             // 如果 GPU 进程类型位 C 或者 C+G 就表示在使用当中
             // http://developer.download.nvidia.com/compute/DCGM/docs/nvidia-smi-367.38.pdf
             for ( GpuProc gpuProc : gpuProcList ) {

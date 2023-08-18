@@ -11,7 +11,7 @@ import lombok.Data;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author xz
@@ -39,5 +39,6 @@ public class Host implements Serializable {
     @TableField(exist = false)
     private int gpuCount = 0;
 
-
+    @TableField(exist = false)
+    private int dockerCount = 0;
 }
