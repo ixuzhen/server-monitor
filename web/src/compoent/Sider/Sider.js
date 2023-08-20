@@ -47,9 +47,10 @@ function Sider() {
     >
       <div className='logo' style={{ paddingTop: '2px' }}>
         <img
-          src='/logo192.png'
+          // src='/logo192.png'
+          src='/logo.png'
           alt='some_text'
-          style={{ width: 64, height: 64, display: 'block', margin: 'auto' }}
+          style={{ width: 80, height: 64, display: 'block', margin: 'auto' }}
         />
       </div>
       {/*<Menu theme="light" mode="inline" defaultSelectedKeys={['4']} items={items} />*/}
