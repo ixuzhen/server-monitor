@@ -20,7 +20,7 @@ public interface IUserService extends IService<User> {
     List<User> getUserByGithubId(Long idGithub);
 
 
-
+    List<User> getUserByGiteeId(Long idGitee);
 
 
 }

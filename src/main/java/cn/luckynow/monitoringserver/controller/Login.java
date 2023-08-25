@@ -38,6 +38,13 @@ public class Login {
         return loginServcie.loginGithub(code);
     }
 
+    @PostMapping("/login/gitee")
+    public Result giteeLogin(@RequestBody String userData){
+        JSONObject userDataJson = JSONUtil.parseObj(userData);
+        String code = (String) userDataJson.get("code");
+        return loginServcie.loginGitee(code);
+    }
+
     @PostMapping("/register")
     public Result register(@RequestBody String userData){
         JSONObject userDataJson = JSONUtil.parseObj(userData);

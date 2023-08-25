@@ -35,8 +35,6 @@ import java.util.concurrent.TimeUnit;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
 
-
-
     @Override
     public boolean saveUser(User user) {
         // 必须确保数据库中没有才行
@@ -55,6 +53,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return list(wrapper);
     }
 
+    @Override
+    public List<User> getUserByGiteeId(Long idGitee) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("id_gitee",idGitee);
+        return list(wrapper);
+    }
 
 
 }

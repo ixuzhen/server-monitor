@@ -103,22 +103,34 @@ public class LoginServiceImpl implements LoginServcie {
     }
 
     @Value("${oauth.github.clientId}")
-    private String clientId;
+    private String githubClientId;
 
     @Value("${oauth.github.clientSecret}")
-    private String clientSecret;
+    private String githubClientSecret;
 
     @Value("${oauth.github.clientUrl}")
-    private String clientUrl;
+    private String githubClientUrl;
 
     @Value("${oauth.github.userInfoUrl}")
-    private String userInfoUrl;
+    private String githubUserInfoUrl;
+
+    @Value("${oauth.gitee.clientId}")
+    private String giteeClientId;
+
+    @Value("${oauth.gitee.clientSecret}")
+    private String giteeClientSecret;
+
+    @Value("${oauth.gitee.clientUrl}")
+    private String giteeClientUrl;
+
+    @Value("${oauth.gitee.userInfoUrl}")
+    private String giteeUserInfoUrl;
 
 
     @Override
     public Result loginGithub(String code) {
 //        String baseUrl = "https://github.com/login/oauth/access_token";
-        String url = clientUrl + "?client_id=" + clientId + "&client_secret=" + clientSecret + "&code=" + code;
+        String url = githubClientUrl + "?client_id=" + githubClientId + "&client_secret=" + githubClientSecret + "&code=" + code;
 
         HttpResponse execute = HttpRequest.post(url)
                 .header(Header.ACCEPT, "application/json")
@@ -128,7 +140,7 @@ public class LoginServiceImpl implements LoginServcie {
             JSONObject bodyJson = JSONUtil.parseObj(body);
             String accessToken = bodyJson.getStr("access_token");
 //            String userInfoUrl = "https://api.github.com/user";
-            HttpResponse userInfoResponse = HttpRequest.get(userInfoUrl)
+            HttpResponse userInfoResponse = HttpRequest.get(githubUserInfoUrl)
                     .header(Header.ACCEPT, "application/json")
                     .header(Header.AUTHORIZATION, "Bearer " + accessToken)
                     .execute();
@@ -163,6 +175,50 @@ public class LoginServiceImpl implements LoginServcie {
         return Result.failed("GitHub 登录失败");
     }
 
+    @Override
+    public Result loginGitee(String code) {
+        String url = giteeClientUrl + "?grant_type=authorization_code&code=" + code + "&client_id=" + giteeClientId + "&redirect_uri=http://127.0.0.1:3000/login?oauth=gitee&client_secret=" + giteeClientSecret;
+        HttpResponse execute = HttpRequest.post(url)
+                .header(Header.ACCEPT, "application/json")
+                .execute();
+        if (execute.isOk()) {
+            String body = execute.body();
+            JSONObject bodyJson = JSONUtil.parseObj(body);
+            String accessToken = bodyJson.getStr("access_token");
+            HttpResponse userInfoResponse = HttpRequest.get(giteeUserInfoUrl + "?access_token=" + accessToken)
+                    .header(Header.ACCEPT, "application/json")
+                    .execute();
+            if (userInfoResponse.isOk()) {
+                String userInfoBody = userInfoResponse.body();
+                JSONObject userInfoBodyJson = JSONUtil.parseObj(userInfoBody);
+                String login = userInfoBodyJson.getStr("login");
+                Long idGitee = Long.parseLong(userInfoBodyJson.getStr("id"));
+
+                List<User> userList = iUserService.getUserByGiteeId(idGitee);
+                if (userList.size() == 1) {
+                    // 登录
+                    User user = userList.get(0);
+                    String jwt = getAndsaveJwt2Redis(user);
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("token", jwt);
+                    return Result.successWithData(map);
+                } else if (userList.size() == 0) {
+                    // 注册
+                    String userName = "Gitee_" + idGitee + IdUtil.simpleUUID();
+                    User user = new User();
+                    user.setIdGitee(idGitee);
+                    user.setUserName(userName);
+                    return register(user);
+                } else {
+                    // 有问题
+                    return Result.failed("Gitee id 出现问题");
+                }
+
+            }
+        }
+        return Result.failed("Gitee 登录失败");
+    }
+
 
     // TODO: 退出登录要从redis中删除数据
     @Override
@@ -194,6 +250,8 @@ public class LoginServiceImpl implements LoginServcie {
         map.put("token", jwt);
         return Result.successWithData(map);
     }
+
+
 
     String getAndsaveJwt2Redis(User user) {
         String userId = user.getId().toString();

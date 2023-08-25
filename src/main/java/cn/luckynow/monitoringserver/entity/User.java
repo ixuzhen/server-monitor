@@ -28,6 +28,8 @@ public class User implements Serializable {
 
     private Long idGithub;
 
+    private Long idGitee;
+
     @ApiModelProperty("用户名")
     private String userName;
 

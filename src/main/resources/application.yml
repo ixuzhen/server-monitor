@@ -42,5 +42,10 @@ oauth:
     clientId: 5f0b4b0f0f
     clientSecret: 5f0b4b0f0f
     userInfoUrl: https://api.github.com/user
+  gitee:
+    clientUrl: https://gitee.com/oauth/token
+    clientId: 5f0b4b0f0f
+    clientSecret: 5f0b4b0f0f
+    userInfoUrl: https://gitee.com/api/v5/user
 
 

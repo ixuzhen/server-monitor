@@ -13,4 +13,6 @@ public interface LoginServcie {
 
     Result register(User user);
 
+    Result loginGitee(String code);
+
 }
