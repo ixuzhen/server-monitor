@@ -1,7 +1,10 @@
 package cn.luckynow.monitoringserver.service;
 
+import cn.luckynow.monitoringserver.entity.Result;
 import cn.luckynow.monitoringserver.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,6 +15,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-02-21
  */
 public interface IUserService extends IService<User> {
-    public boolean saveUser(User user);
+    boolean saveUser(User user);
+
+    List<User> getUserByGithubId(Long idGithub);
+
+
+
+
 
 }

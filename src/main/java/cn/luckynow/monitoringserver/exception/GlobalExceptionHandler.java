@@ -23,10 +23,8 @@ public class GlobalExceptionHandler {
     public Result customException(Exception e) {
 
         //log.error(e.getCause().getMessage());
-        log.error("-------------------------");
         //log.error(e.getMessage());
         e.printStackTrace();
-        log.error("-------------------------");
         //WebUtils.initResponse(response);
         return Result.failed(e.getMessage());
     }

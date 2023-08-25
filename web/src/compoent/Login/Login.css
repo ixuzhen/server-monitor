@@ -12,3 +12,18 @@
     padding: 10px 20px;
     margin: 10px;
 }
+
+
+.otherLogin{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.otherLoginSpanCenter{
+    height: 32px;
+    display: flex;
+    align-items: center; /* 在交叉轴上垂直居中 */
+    cursor: pointer;
+}

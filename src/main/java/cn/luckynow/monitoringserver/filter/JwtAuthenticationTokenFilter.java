@@ -46,7 +46,7 @@ public class JwtAuthenticationTokenFilter  extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        //解析token
+        //解析token,
         String userid;
         try {
             Claims claims = JwtUtil.parseJWT(token);
