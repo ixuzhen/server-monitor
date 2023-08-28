@@ -5,6 +5,7 @@ import { isSuccess, showError } from '../../helper/utils';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Spin } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 const LoginForm = () => {
 
@@ -94,6 +95,8 @@ const LoginForm = () => {
   return (
     <div>
       <div>
+        {/*<h3>账号登录</h3>*/}
+        <div style={{fontSize: "20px", marginBottom: "20px", textAlign:"center"}}>账号登陆</div>
         <Form
           name='normal_login'
           className='login-form'
@@ -102,7 +105,7 @@ const LoginForm = () => {
           }}
           onFinish={onFinish}
         >
-          <h3>账号登录</h3>
+
           <Form.Item
             name='username'
             rules={[
@@ -128,13 +131,15 @@ const LoginForm = () => {
               }
             ]}
           >
-            <Input
+            <Input.Password
               style={{ height: '40px' }}
               // prefix={<LockOutlined className='site-form-item-icon' />}
               prefix={<div style={{ marginRight: '10px' }}>密码</div>}
               type='password'
               placeholder='请输入密码(123456)'
+              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
             />
+
           </Form.Item>
           {/*<Form.Item>*/}
           {/*  /!*<a className='login-form-forgot' href=''>*!/*/}
@@ -168,7 +173,7 @@ const LoginForm = () => {
         </Form>
       </div>
 
-      <div style={{ margin: '0 auto', color: 'rgb(140, 146, 164)', textAlign: 'center', fontSize: '14px' }}>
+      <div style={{ margin: '0 auto', color: 'rgb(140, 146, 164)', textAlign: 'center', fontSize: '14px' , marginTop:"40px"}}>
         <div>
           其他方式登录
         </div>

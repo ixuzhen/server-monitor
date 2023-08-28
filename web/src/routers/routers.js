@@ -19,6 +19,7 @@ import GpuUnUsedPage from '../compoent/Content/GPU/GPUUnUsedPage';
 import LoginForm from '../compoent/Login/LoginForm';
 import DockerHost from '../compoent/Content/Docker/DockerHost';
 import DockerInfo from '../compoent/Content/Docker/DockerInfo';
+import TerminalPage from '../compoent/Terminal/TerminalPage';
 
 const withLoadingComponent = (comp) => (
   <React.Suspense fallback={<div>Loading...</div>}>{comp}</React.Suspense>
@@ -128,6 +129,7 @@ export default [
           </PrivateRoute>
         ),
       },
+
       {
         path: '/dockerinfo/:ip',
         element: withLoadingComponent(
@@ -141,6 +143,7 @@ export default [
   {
     path: '/',
     element: <Login></Login>,
+    // element: <TerminalPage></TerminalPage>,
     children: [
       {
         path: '/login',
@@ -152,43 +155,17 @@ export default [
       },
     ],
   },
+  {
+    path: '/webssh',
+    element: withLoadingComponent(
+      <PrivateRoute>
+        <TerminalPage />
+      </PrivateRoute>
+    ),
+  },
 
   {
     path: '*',
     element: <Navigate to='/hostinfo' />,
   },
 ];
-
-// export default [
-//   {
-//     path: '/',
-//     element: <Home></Home>,
-//   },
-//   {
-//     path: '/hostinfo',
-//     element: withLoadingComponent(<HostInfo />),
-//     // element: <HostInfo />,
-//   },
-//   {
-//     path: '/gpuhost',
-//     element: withLoadingComponent(<GPUHost />),
-//     // children:[
-//     //     {
-//     //         path:'gpu/:ip',
-//     //         element:<div>123123333</div>
-//     //     }
-//     // ]
-//   },
-//   {
-//     path: '/gpuinfo/:ip',
-//     element: withLoadingComponent(<GPUInfo />),
-//   },
-//   {
-//     path: '/commoninfo/:ip',
-//     element: withLoadingComponent(<CommonInfo />),
-//   },
-//   {
-//     path: '/',
-//     element: <Navigate to='/hostinfo' />,
-//   },
-// ];

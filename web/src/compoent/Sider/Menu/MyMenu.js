@@ -55,6 +55,11 @@ const items = [
     '/dockerhost',
     <ContainerOutlined />
   ),
+  getItem(
+    <Link to='/terminal'>远程终端</Link>,
+    '/terminal',
+    <ContainerOutlined />
+  ),
 
   getItem(
     <Link to='/message'>消息推送</Link>,
