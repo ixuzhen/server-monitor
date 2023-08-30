@@ -13,6 +13,11 @@ public class Result<T> {
     private String message;
     private T data;
 
+    // 构造一个全参生成器
+    public static <E> Result<E> getResult(int code, String message, E data){
+        return new Result<E>(code,message,data);
+    }
+
     public static <E> Result<E> successWithoutData(){
         return new Result<E>(200,null,null);
     }

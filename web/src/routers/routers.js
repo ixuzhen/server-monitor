@@ -11,7 +11,7 @@ import Register from '../compoent/Login/Register';
 // const Home = lazy(()=>import("./compoent/Home/Home"))
 import { history } from '../helper/history';
 import MessagePush from '../compoent/Content/message/MessagePush';
-import Terminal from '../compoent/Content/terminal/terminal';
+import Terminal from '../compoent/Content/terminal/Terminal';
 import WarningPush from '../compoent/Content/WarningPush/WarningPush';
 import GpuHostIp from '../compoent/Content/GPU/GPUHostIp';
 import GpuUsedPage from '../compoent/Content/GPU/GPUUsedPage';

@@ -21,7 +21,7 @@ public interface WebSSHService {
     /**
      * @Description: 数据写回前端 for websocket
      */
-    public void sendMessage(WebSocketSession session, byte[] buffer) throws IOException;
+    public void sendMessage(WebSocketSession session, byte[] buffer);
 
     /**
      * @Description: 关闭连接

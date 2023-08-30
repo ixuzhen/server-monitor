@@ -1,9 +1,14 @@
 package cn.luckynow.monitoringserver.websocket.pojo;
 
+import lombok.Data;
+
 /**
 * @Description: webssh数据传输
 */
+
+@Data
 public class WebSSHData {
+    private Integer id;
     //操作
     private String operate;
     private String host;
@@ -13,51 +18,53 @@ public class WebSSHData {
     private String password;
     private String command = "";
 
-    public String getOperate() {
-        return operate;
-    }
 
-    public void setOperate(String operate) {
-        this.operate = operate;
-    }
 
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public Integer getPort() {
-        return port;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getCommand() {
-        return command;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
-    }
+//    public String getOperate() {
+//        return operate;
+//    }
+//
+//    public void setOperate(String operate) {
+//        this.operate = operate;
+//    }
+//
+//    public String getHost() {
+//        return host;
+//    }
+//
+//    public void setHost(String host) {
+//        this.host = host;
+//    }
+//
+//    public Integer getPort() {
+//        return port;
+//    }
+//
+//    public void setPort(Integer port) {
+//        this.port = port;
+//    }
+//
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
+//
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
+//
+//    public String getCommand() {
+//        return command;
+//    }
+//
+//    public void setCommand(String command) {
+//        this.command = command;
+//    }
 }

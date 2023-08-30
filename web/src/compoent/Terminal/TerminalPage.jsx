@@ -8,11 +8,19 @@ const TerminalPage = () => {
   let term = null;
   let socket = null;
 
-  let host = "113.106.111.75";
-  let port = "2151";
-  let username = "root";
-  let password = "Osroot123";
+  const queryParams = new URLSearchParams(window.location.search);
+  const id = queryParams.get('id');
+  const host = queryParams.get('address');
+  const port = queryParams.get('port');
+  const username = queryParams.get('username');
+  // const password = queryParams.get('password');
+
+  // let host = "113.106.111.75";
+  // let port = "2151";
+  // let username = "root";
+  // let password = "Osroot123";
   let operate = "connect";
+  // todo: 这里要改
   let url = "127.0.0.1:8080/webssh"
 
 
@@ -80,9 +88,9 @@ const TerminalPage = () => {
 
     term.open(element);
     fitAddon.fit();
-    term.write('connecting...');
+    term.write(username + '@'+ host+':'+port+'  connecting...');
 
-    webSocketConnect({ host, port, username, password, operate});
+    webSocketConnect({id, host, port, username, operate});
     term.focus();
   }
 

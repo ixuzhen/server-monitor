@@ -1,6 +1,8 @@
 package cn.luckynow.monitoringserver.websocket.impl;
 
 import cn.luckynow.monitoringserver.constants.WebSSHConstantPool;
+import cn.luckynow.monitoringserver.service.ISshHostService;
+import cn.luckynow.monitoringserver.service.ISshHostWithPasswordService;
 import cn.luckynow.monitoringserver.websocket.WebSSHService;
 import cn.luckynow.monitoringserver.websocket.pojo.SSHConnectInfo;
 import cn.luckynow.monitoringserver.websocket.pojo.WebSSHData;
@@ -13,8 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,6 +41,9 @@ public class WebSSHServiceImpl implements WebSSHService {
     //线程池
     private ExecutorService executorService = Executors.newCachedThreadPool();
 
+    @Resource
+    private ISshHostWithPasswordService iSshHostWithPasswordService;
+
     /**
      * @Description: 初始化连接
      */
@@ -55,11 +62,12 @@ public class WebSSHServiceImpl implements WebSSHService {
      * @Description: 处理客户端发送的数据
      */
     @Override
-    public void recvHandle(String buffer, WebSocketSession session) {
+    public void recvHandle(String buffer, WebSocketSession session){
         ObjectMapper objectMapper = new ObjectMapper();
         WebSSHData webSSHData = null;
         try {
             webSSHData = objectMapper.readValue(buffer, WebSSHData.class);
+
         } catch (IOException e) {
             logger.error("Json转换异常");
             logger.error("异常信息:{}", e.getMessage());
@@ -69,6 +77,8 @@ public class WebSSHServiceImpl implements WebSSHService {
         if (WebSSHConstantPool.WEBSSH_OPERATE_CONNECT.equals(webSSHData.getOperate())) {
             //找到刚才存储的ssh连接对象
             SSHConnectInfo sshConnectInfo = (SSHConnectInfo) sshMap.get(userId);
+            String password = iSshHostWithPasswordService.getPasswordByHostId(webSSHData.getId());
+            webSSHData.setPassword(password);
             //启动线程异步处理
             WebSSHData finalWebSSHData = webSSHData;
             executorService.execute(new Runnable() {
@@ -77,8 +87,10 @@ public class WebSSHServiceImpl implements WebSSHService {
                     try {
                         connectToSSH(sshConnectInfo, finalWebSSHData, session);
                     } catch (JSchException | IOException e) {
-                        logger.error("webssh连接异常");
+                        logger.error("webssh连接异常!");
                         logger.error("异常信息:{}", e.getMessage());
+                        String message = "连接异常,请检查IP，端口号，用户名，密码是否正确。异常信息" + e.getMessage();
+                        sendMessage(sshConnectInfo.getWebSocketSession(), message.getBytes());
                         close(session);
                     }
                 }
@@ -90,9 +102,11 @@ public class WebSSHServiceImpl implements WebSSHService {
                 try {
                     transToSSH(sshConnectInfo.getChannel(), command);
                 } catch (IOException e) {
-                    logger.error("webssh连接异常");
+                    logger.error("webssh连接异常!!");
                     logger.error("异常信息:{}", e.getMessage());
+                    sendMessage(sshConnectInfo.getWebSocketSession(), "连接关闭".getBytes());
                     close(session);
+
                 }
             }
         } else {
@@ -102,9 +116,13 @@ public class WebSSHServiceImpl implements WebSSHService {
     }
 
     @Override
-    public void sendMessage(WebSocketSession session, byte[] buffer) throws IOException {
+    public void sendMessage(WebSocketSession session, byte[] buffer)  {
 //        logger.info("发送数据:{}", Arrays.toString(buffer));
-        session.sendMessage(new TextMessage(buffer));
+        try {
+            session.sendMessage(new TextMessage(buffer));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

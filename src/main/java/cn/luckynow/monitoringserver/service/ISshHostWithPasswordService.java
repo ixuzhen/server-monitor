@@ -1,8 +1,8 @@
 package cn.luckynow.monitoringserver.service;
 
 import cn.luckynow.monitoringserver.entity.SshHost;
+import cn.luckynow.monitoringserver.entity.SshHostWithPassword;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.data.relational.core.sql.In;
 
 import java.util.List;
 
@@ -14,8 +14,7 @@ import java.util.List;
  * @author xz
  * @since 2023-08-28
  */
-public interface ISshHostService extends IService<SshHost> {
+public interface ISshHostWithPasswordService extends IService<SshHostWithPassword> {
 
-    List<SshHost> getListByUserId(Long userId);
-
+    String getPasswordByHostId(Integer hostId);
 }

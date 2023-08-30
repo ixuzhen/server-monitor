@@ -1,0 +1,11 @@
+.ssh-host-card {
+    width: 290px;
+    height: 60px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: auto auto;
+}
