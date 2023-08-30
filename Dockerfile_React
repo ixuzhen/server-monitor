@@ -2,6 +2,7 @@ FROM node:18.12.1 AS build
 #FROM node:18 AS build
 WORKDIR /app
 COPY ./web/package*.json ./
+RUN npm config set registry https://registry.npmmirror.com
 RUN npm install
 COPY ./web/public public/
 COPY ./web/src src/

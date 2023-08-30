@@ -32,6 +32,11 @@ services:
       # 发生消息的邮箱，验证码的密码
       - --spring.mail.password=DJLLUBSOPPKL
       - --spring.mail.port=25
+      # github 与 gitee 第三方登录配置
+      - --oauth.github.clientId=123dasdas
+      - --oauth.github.clientSecret=sdas12312
+      - --oauth.gitee.clientId=gfhfgh123
+      - --oauth.gitee.clientSecret=sdfsdf23423
 
 
   monitor_mysql:

@@ -1,11 +1,12 @@
 import { Button, Form, Input } from 'antd';
 
-import { LoginAPI } from '../../request/index';
+import { baseURL, LoginAPI } from '../../request/index';
 import { isSuccess, showError, showErrorWithCode } from '../../helper/utils';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Spin } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+
 
 const LoginForm = () => {
 
@@ -21,7 +22,7 @@ const LoginForm = () => {
         const res = await LoginAPI.post('/login/github', {
           code: codeGithub
         },{
-          timeout: 10000 // 设置超时时间，单位是毫秒
+          timeout: 20000 // 设置超时时间，单位是毫秒
         });
         const { code, message, data } = res.data;
         setSpinning(false);
@@ -36,7 +37,7 @@ const LoginForm = () => {
         const res = await LoginAPI.post('/login/gitee', {
           code: codeGitee
         },{
-          timeout: 10000 // 设置超时时间，单位是毫秒
+          timeout: 20000 // 设置超时时间，单位是毫秒
         });
         const { code, message, data } = res.data;
         setSpinning(false);
@@ -88,7 +89,7 @@ const LoginForm = () => {
 
   const handleGiteeLogin = async () => {
     window.open(
-      `https://gitee.com/oauth/authorize?client_id=0f020b75c9ec21aed8cd9d5b7f469df49df38c8f9efb6ba69a112b69804b7eb3&response_type=code&redirect_uri=http://127.0.0.1:3000/login?oauth=gitee`
+      `https://gitee.com/oauth/authorize?client_id=0f020b75c9ec21aed8cd9d5b7f469df49df38c8f9efb6ba69a112b69804b7eb3&response_type=code&redirect_uri=${frontpointUrl}/login?oauth=gitee`
     );
   };
 

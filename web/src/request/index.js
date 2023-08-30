@@ -21,7 +21,7 @@ const baseURL = process.env.REACT_APP_SERVER
 let endpointHostAddress = process.env.REACT_APP_SERVER
   ? baseURL.replace(/(http|https):\/\//, '')
   : hostname + ':8080';
-
+const frontpointUrl = protocol + host;
 // const reactURL = process.env.REACT_APP_SERVER;
 
 const LoginAPI = axios.create({
@@ -78,4 +78,4 @@ API.interceptors.response.use(
   }
 );
 
-export { LoginAPI, API ,endpointHostAddress};
+export { LoginAPI, API ,endpointHostAddress, baseURL, frontpointUrl};
