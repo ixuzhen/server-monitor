@@ -1,5 +1,4 @@
 import HostInfo from '../compoent/Content/HostInfo';
-import GPUHost from '../compoent/Content/GPU/GPUHost';
 import { Navigate } from 'react-router-dom';
 import React from 'react';
 import GPUInfo from '../compoent/Content/GPU/GPUInfo';

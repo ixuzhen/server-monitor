@@ -33,9 +33,8 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 </p>
 
 ## 代办
-+ [ ] 一开始就发送心跳
-+ [ ] 增加进程的开始时间
-+ [ ] docker 容器的监控
++ [x] 增加进程的开始时间
++ [x] docker 容器的监控
 + [x] 内存信息
 + [x] GPU 信息
 + [x] GPU 进程信息
@@ -48,13 +47,10 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 + [ ] SSH 的版本
 + [ ] CPU 信息
 + [ ] 网络负载信息
-+ [ ] 显卡空闲提醒
-+ [ ] 远程终端
++ [x] 远程终端
 + [ ] 内存，CPU历史记录
-+ [ ] 更加详细的进程信息，如进程开始时间
 + [ ] 重要日志的信息，如登录日志
 + [ ] server 端提供下载上传数据脚本的功能
-+ [ ] 清理数据 server 端数据库的功能
 + [ ] 远程文件管理
 
 ## 主要功能
@@ -63,9 +59,21 @@ _✨ 基于 SpringBoot & React 的服务器监控系统 ✨_
 3. 如果配置了上边的消息推送功能，如果发送服务器断连、硬盘不足、GPU 空闲等情况会发送邮件提醒（也可以通过企业微信、钉钉、飞书推送）。
 
 ## 展示
+#### 硬盘信息
 <img src="./images/diskInfo.png">
+
+#### GPU 信息
 <img src="./images/gpuInfo.png">
-<img src="images/connectInfo.png">
+
+#### 端口信息
+<img src="./images/connectInfo.png">
+
+#### 消息推送
+<img src="./images/messagePush.png"/>
+
+#### 远程终端
+<img src="./images/terminalHost.png">
+<img src="./images/terminal.png">
 
 ## 部署
 ### 基于 Docker 进行部署接收端

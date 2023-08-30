@@ -3,6 +3,7 @@ import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import 'xterm/css/xterm.css'
 import { showError } from '../../helper/utils';
+import { endpointHostAddress } from '../../request';
 
 const TerminalPage = () => {
   let term = null;
@@ -20,9 +21,9 @@ const TerminalPage = () => {
   // let username = "root";
   // let password = "Osroot123";
   let operate = "connect";
-  // todo: 这里要改
-  let url = "127.0.0.1:8080/webssh"
 
+  // todo: 这里要改
+  const url = endpointHostAddress + '/webssh';
 
   function generateEndpoint() {
     let protocol;
@@ -120,7 +121,7 @@ const TerminalPage = () => {
     }
     socket.onclose = function (evt) {
       //连接关闭回调
-      term.write("\rconnection closed");
+      term.write(" connection closed");
     }
   }
 

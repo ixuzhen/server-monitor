@@ -3,7 +3,6 @@ import { Card, Divider, List, Table, Tag } from 'antd';
 import { isSuccess, paringDate, showError } from '../../helper/utils';
 import { useParams } from 'react-router-dom';
 import { API } from '../../request';
-import Memory from './CommonInfoComponent/Memory';
 
 const pasringByte = (text) => {
   const kb = parseInt(text) / 1024;

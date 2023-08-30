@@ -3,7 +3,7 @@ import { Button, Col, Form, Input, Modal, Row } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import SshHostCard from './SshHostCard';
 import { API } from '../../../request';
-import { isSuccess, showError, showErrorWithCode, showSuccess } from '../../../helper/utils';
+import { isSuccess, showErrorWithCode, showSuccess } from '../../../helper/utils';
 
 const Terminal = () => {
 

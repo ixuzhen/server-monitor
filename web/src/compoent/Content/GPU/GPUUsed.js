@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Space, Table, Tag } from 'antd';
-import axios from 'axios';
+import {  Table } from 'antd';
 import { isSuccess, paringDate } from '../../../helper/utils';
 import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';

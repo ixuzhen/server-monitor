@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
+import React from 'react';
 import WarningTable from './WarningTable/WarningTable';
 const WarningPush = () => {
   return (

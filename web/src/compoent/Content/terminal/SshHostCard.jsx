@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './SshHostCard.css';
 import { CodeTwoTone, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Popconfirm, Tooltip } from 'antd';
-import { API } from '../../../request';
-import { isSuccess, showError } from '../../../helper/utils';
+
 
 const SshHostCard = (props) => {
   // 通过props对象访问从父组件传递的数据对象

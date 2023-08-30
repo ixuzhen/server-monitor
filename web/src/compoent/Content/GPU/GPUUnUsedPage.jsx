@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Space, Table, Tag, Collapse } from 'antd';
-import axios from 'axios';
+import { Layout, Collapse } from 'antd';
 import { isSuccess, paringDate } from '../../../helper/utils';
 import {
   Link,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-  useRoutes,
 } from 'react-router-dom';
 import GPUUsed from './GPUUsed';
 import { API } from '../../../request';

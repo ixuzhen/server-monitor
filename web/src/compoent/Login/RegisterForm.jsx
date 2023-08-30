@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { isSuccess, showError } from '../../helper/utils';
 import { LoginAPI } from '../../request';
 import { Link, useNavigate } from 'react-router-dom';

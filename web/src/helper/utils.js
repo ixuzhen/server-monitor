@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import { toastConstants } from '../constants';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
 export function isSuccess(code) {

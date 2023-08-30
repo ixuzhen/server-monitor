@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Divider, List, Table, Tag } from 'antd';
+import { Card, Divider, List, Table } from 'antd';
 import { isSuccess, paringDate, showError } from '../../../helper/utils';
 import { useParams } from 'react-router-dom';
 import { API } from '../../../request';

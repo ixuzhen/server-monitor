@@ -5,9 +5,22 @@ import { isSuccess, showError } from '../helper/utils';
 // const baseURL = 'http://125.216.243.209:8080';
 // const baseURL = 'http://127.0.0.1:8080';
 // const baseURL = '';
+// 获取协议部分
+const protocol = window.location.protocol;    // 输出: "http:"
+// 获取主机部分（域名和端口）
+const host = window.location.host;            // 输出: "127.0.0.1:8080"
+// 获取主机部分（域名）
+const hostname = window.location.hostname;    // 输出: "127.0.0.1"
+// 获取端口部分
+const port = window.location.port;            // 输出: "8080"
+
 const baseURL = process.env.REACT_APP_SERVER
   ? process.env.REACT_APP_SERVER
-  : '';
+  : protocol + '//' + hostname + ':8080';
+// 把REACT_APP_SERVER前边的http://或者https://去掉
+let endpointHostAddress = process.env.REACT_APP_SERVER
+  ? baseURL.replace(/(http|https):\/\//, '')
+  : hostname + ':8080';
 
 // const reactURL = process.env.REACT_APP_SERVER;
 
@@ -65,4 +78,4 @@ API.interceptors.response.use(
   }
 );
 
-export { LoginAPI, API };
+export { LoginAPI, API ,endpointHostAddress};
