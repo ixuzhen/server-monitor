@@ -1,6 +1,6 @@
 import { Button, Form, Input } from 'antd';
 
-import { baseURL, LoginAPI } from '../../request/index';
+import { frontpointUrl, LoginAPI } from '../../request/index';
 import { isSuccess, showError, showErrorWithCode } from '../../helper/utils';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
