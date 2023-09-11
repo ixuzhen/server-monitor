@@ -2,7 +2,12 @@ import { Button, Divider, Input, Select, Tooltip } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { API, LoginAPI } from '../../../request';
-import { isSuccess, showError, showErrorWithCode, showSuccess } from '../../../helper/utils';
+import {
+  isSuccess,
+  showError,
+  showErrorWithCode,
+  showSuccess,
+} from '../../../helper/utils';
 
 const MessagePush = () => {
   // TODO: 获取邮箱和其他信息，放入输入框中
@@ -21,8 +26,24 @@ const MessagePush = () => {
     const { code, message, data } = res.data;
     if (isSuccess(code)) {
       console.log(code);
+      const {
+        email,
+        username,
+        feishuWebhookUrl,
+        feishuWebhookSecret,
+        dingWebhookUrl,
+        dingWebhookSecret,
+        wechatWebhookUrl,
+      } = data;
+      setEmail(email);
+      setUsername(username);
+      setFeishuUrl(feishuWebhookUrl);
+      // setFeishuSecret(feishuWebhookSecret);
+      setDingUrl(dingWebhookUrl);
+      // setDingSecret(dingWebhookSecret);
+      setwechatUrl(wechatWebhookUrl);
     } else {
-      showErrorWithCode(code,'加载数据失败' + message);
+      showErrorWithCode(code, '加载数据失败' + message);
     }
   };
 
