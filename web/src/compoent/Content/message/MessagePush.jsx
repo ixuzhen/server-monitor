@@ -1,7 +1,7 @@
 import { Button, Divider, Input, Select, Tooltip } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
-import { API, LoginAPI } from '../../../request';
+import { API, baseURL, LoginAPI } from '../../../request';
 import {
   isSuccess,
   showError,
@@ -164,8 +164,8 @@ const MessagePush = () => {
     };
   }
   const handleCopy = () => {
-    const value =
-      'https://luckynow.cn:8080/push/' + username + '?title=标题&content=内容';
+    const value = baseURL + '/push/' + username + '?title=标题&content=内容';
+    // const value = 1'https://monitoring.luckynow.cn:8080/push/' + username + '?title=标题&content=内容';
     const textarea = document.createElement('textarea');
     textarea.value = value;
     document.body.appendChild(textarea);
@@ -241,11 +241,12 @@ const MessagePush = () => {
             style={{
               width: '50%',
             }}
-            value={
-              'https://monitoring.luckynow.cn/api/push/' +
-              username +
-              '?title=标题&content=内容'
-            }
+            // value={
+            //   'https://monitoring.luckynow.cn/api/push/' +
+            //   username +
+            //   '?title=标题&content=内容'
+            // }
+            value={baseURL + '/push/' + username + '?title=标题&content=内容'}
           />
           <Tooltip title='复制'>
             <Button icon={<CopyOutlined />} onClick={handleCopy} />
