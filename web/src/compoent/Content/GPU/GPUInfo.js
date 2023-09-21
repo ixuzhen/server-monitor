@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { isSuccess, paringDate } from '../../../helper/utils';
 import { Card, List, Table } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
@@ -213,7 +213,7 @@ const GPUInfo = () => {
       <List
         grid={{ gutter: 9, column: 3 }}
         dataSource={[
-          { name: 'IP', content: ip },
+          { name: 'IP', content: <Link to={`/commoninfo/${ip}`}>{ip}</Link> },
           {
             name: '驱动版本',
             content: gpuinfos.length > 0 ? gpuinfos[0].driverVersion : '',

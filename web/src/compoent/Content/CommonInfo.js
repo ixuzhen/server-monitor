@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Divider, List, Table, Tag } from 'antd';
 import { isSuccess, paringDate, showError } from '../../helper/utils';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { API } from '../../request';
 
 const pasringByte = (text) => {
@@ -186,7 +186,8 @@ const CommonInfo = () => {
       <List
         grid={{ gutter: 12, column: 4 }}
         dataSource={[
-          { name: 'IP', content: ip },
+          // { name: 'IP', content: ip },
+          { name: 'IP', content: <Link to={`/gpuinfo/${ip}`}>{ip}</Link> },
 
           {
             name: '最新上报日期',
