@@ -204,6 +204,6 @@ def start():
 
 if __name__ == '__main__':
     print("start")
-    # start()
-    send_all_message()
+    start()
+    # send_all_message()
     # get_docker_info_dict()
